@@ -1,0 +1,74 @@
+@import "./sass/main.scss";
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Gabarito&family=Lato:wght@300&family=Work+Sans:wght@500&display=swap');
+
+:root {
+    --primary-50:#dfd8cf;
+    --primary-100:#C7B299;
+    --primary-150:#988670;
+    --primary-200:#a9957d;
+    --primary-300:#675640;
+    --accent-50:#aca7a0;
+    --accent-100:#A68B5B;
+    --accent-200:#483507;
+    --text-100:#4D4D4D;
+    --text-200:#797979;
+    --bg-100:#F5EFE7;
+    --bg-200:#ebe5dd;
+    --bg-300:#c2bdb5;
+    --bg-325:#a39f99;
+    --font-bold: 'Work Sans', sans-serif;
+    --font-boldER: 'Comfortaa', sans-serif;
+    --font-header: 'Gabarito', sans-serif;
+    --font-p: 'Lato', sans-serif;
+    background-color: var(--bg-100);
+}
+
+body.preload *{
+    animation-duration: 0s !important;
+}
+
+.font-color-1 {
+    color: var(--text-100);
+}
+
+.font-color-2 {
+    color: var(--text-200);
+}
+
+h1 {
+    font-family: var(--font-header);
+    color: var(--text-100) !important;
+}
+
+h2 {
+    font-family: var(--font-boldER);
+    color: var(--text-100) !important;
+    font-size: 1.75rem !important;
+}
+
+h3 {
+    font-family: var(--font-bold);
+    color: var(--text-100) !important;
+    margin: 0 !important;
+}
+
+h4 {
+    font-family: var(--font-bold);
+    margin: 0 !important;
+}
+
+h5 {
+    font-family: var(--font-p);
+    color: var(--text-100) !important;
+    margin: 0 !important;
+}
+
+h6 {
+    margin: 0 !important;
+}
+
+p {
+    font-family: var(--font-p);
+    font-size: 1.5rem;
+}
+

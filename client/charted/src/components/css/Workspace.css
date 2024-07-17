@@ -1,0 +1,39 @@
+.side-bar {
+    height: calc(100vh - 59px);
+    width: 15rem;
+    background-color: var(--bg-200);
+}
+
+.side-btn {
+    width: 100%;
+    text-align: start;
+    border: none;
+    background-color: var(--bg-200);
+}
+
+.side-btn-img {
+    margin-right: 0.5rem;
+    filter: contrast(0.7);
+} 
+
+.btn-selected {
+    background-color: var(--bg-300);
+}
+
+.sidebar-header {
+    text-align: center;
+    text-wrap: nowrap;
+}
+
+.selection-area {
+  width: 100vw; /* idk why this works i love css*/
+  padding: 1rem;
+  z-index: 1;
+  height: 100%;
+}
+
+.scrollable {
+    overflow-y: hidden;
+    overflow-x: auto;
+    height: calc(100vh - 59px);
+}

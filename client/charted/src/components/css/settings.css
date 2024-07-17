@@ -1,0 +1,124 @@
+.settings-container {
+  background-color: var(--bg-200);
+  padding: 1rem;
+  width: 50rem;
+  border-radius: 0.5rem;
+  margin-top: 2rem;
+  /* transition: all 100ms; */
+  animation: shrink 300ms forwards;
+  animation-play-state: running;
+}
+
+.line {
+  width: 75%;
+  height: 0.1rem;
+  background-color: var(--accent-200);
+}
+
+.line-grad {
+  width: 12.5%;
+  height: 0.1rem;
+}
+
+.grad-left {
+  background-image: linear-gradient(to left, var(--accent-200), var(--bg-200));
+}
+
+.grad-right {
+  background-image: linear-gradient(to right, var(--accent-200), var(--bg-200));
+}
+
+.account-header {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.account-info-input {
+  outline: none;
+  margin-top: 0.4rem !important;
+  border-radius: 0.25rem;
+  padding: 0.8rem;
+  background-color: var(--bg-300);
+  border: 0.15rem solid var(--accent-50);
+  width: 23rem;
+  font-family: var(--font-p);
+  font-size: 1.25rem;
+  transition: all 300ms;
+  color: var(--font-100);
+}
+
+.account-info-input:focus {
+  background-color: var(--accent-50);
+  border: 0.15rem solid var(--bg-300);
+}
+
+.settings-btn-text {
+  font-size: 1.4rem !important;
+  width: fit-content;
+}
+
+.settings-btn {
+  border-radius: 0.25rem;
+  border: 0.15rem solid var(--accent-50) !important;
+  background-color: var(--bg-300);
+  box-shadow: 0.2rem 0.2rem 0.2rem rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  margin-right: 1rem;
+}
+
+.settings-btn:hover {
+  background-color: var(--accent-50) !important;
+  border: 0.15rem solid var(--bg-300) !important;
+}
+
+.hidden-form {
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.animate-settings-container {
+  animation: grow 300ms forwards;
+  animation-play-state: running;
+}
+
+@keyframes grow {
+  from {height: 29.5rem}
+  to {height: 47rem}
+}
+
+@keyframes shrink {
+  from {height: 47rem}
+  to {height: 29.5rem}
+}
+
+.icon-status {
+  position: relative;
+  bottom: 0.07rem;
+}
+
+.icon-spinner {
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from {rotate: 0deg}
+  to {rotate: 360deg}
+}
+
+.hide-txt {
+  opacity: 0;
+}
+
+.settings-error-txt {
+  background-color: var(--primary-50);
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  text-align: center;
+  min-width: 18rem;
+  width: 20rem;
+  max-width: 24rem;
+  padding: 0.2rem;
+  border: rgb(177, 0, 0) solid 0.1rem;
+  transition: all 100ms;
+}
