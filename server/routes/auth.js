@@ -27,10 +27,8 @@ router.post("/register", async (req, res) => {
 
   try {
     await User.create(userObject);
-    res.send("Account added successfully");
+    res.send("Account created successfully");
   } catch (err) {
-    console.error(err);
-
     if (err instanceof Sequelize.UniqueConstraintError) {
       if (err.errors[0].path === "username") {
         return res.status(409).send("Username already exists. Please choose a different username.");
@@ -54,9 +52,8 @@ router.get("/getPass", authenticateToken, (req, res) => {
 
 router.get("/login", (req, res) => {
   const loginData = {
-    username: "bob",
-    password: "password",
-    email: "bob@gmail.com",
+    email: req.body.email,
+    password: req.body.password,
   };
 
   const accessToken = jwt.sign({ username: loginData.username }, process.env.ACCESS_TOKEN_SECRET);
