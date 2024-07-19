@@ -145,9 +145,10 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     const formElements = Object.fromEntries(new FormData(e.target));
     let tempID = -new Date().getUTCMilliseconds();
 
-    createClientChart(formElements.chartName, tempID);
-    const newChartID = (await createChart(workspaceID, formElements.chartName)).id;
-    updateClientChartID(tempID, newChartID);
+    // createClientChart(formElements);
+    console.log(formElements);
+    // const chartCreation = await createChart();
+    // updateClientChartID(tempID, newChartID);
   }
 
   async function handleItemSubmit(e) {

@@ -18,6 +18,7 @@ app.use(
 
 app.use("/auth", authRoutes);
 app.use("/workspace", workspaceRoutes);
+// app.use("/chart")
 
 const PORT = 3000;
 

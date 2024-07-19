@@ -3,7 +3,7 @@ import "./css/Workspace.css";
 import chart from "../assets/chart.svg";
 import question from "../assets/question.svg";
 import { useEffect, useRef, useState } from "react";
-import { authenticateWorkspace, getChartsDisplay, getWorkspaceName } from "../util/API";
+import { getWorkspaceData, getCharts } from "../util/API";
 import { getCookie } from "../util/CookieManager";
 import { isOverflown } from "../util/Util";
 import ChartArea from "./ChartArea";
@@ -20,21 +20,32 @@ export default function Workspace() {
 
   useEffect(() => {
     async function loadWorkspaceData() {
-      const authenticationResult = await authenticateWorkspace(getCookie("userID"), URL.id);
-      switch (authenticationResult) {
-        case -1:
-          setWorkspaceName("Invalid workspace");
-          break;
-        case 0:
-          setWorkspaceName("Server error");
-          break;
-        case 1:
-          setWorkspaceName((await getWorkspaceName(URL.id)).name);
-          setSuccessfulLoad(true);
-          break;
-        default:
-          setWorkspaceName("Client side error");
+
+      try {
+        const workspaceData = await getWorkspaceData(URL.id);
+        setWorkspaceName(workspaceData.name);
+        setSuccessfulLoad(true);
+      } catch(err) {
+
       }
+
+
+
+      // const authenticationResult = await authenticateWorkspace(URL.id);
+      // switch (authenticationResult) {
+      //   case -1:
+      //     setWorkspaceName("Invalid workspace");
+      //     break;
+      //   case 0:
+      //     setWorkspaceName("Server error");
+      //     break;
+      //   case 1:
+      //     setWorkspaceName((await getWorkspaceName(URL.id)).name);
+      //     setSuccessfulLoad(true);
+      //     break;
+      //   default:
+      //     setWorkspaceName("Client side error");
+      // }
     }
     loadWorkspaceData();
   }, []);
@@ -47,7 +58,7 @@ export default function Workspace() {
 
   useEffect(() => {
     async function loadCharts() {
-      setCharts((await getChartsDisplay(URL.id)).map(chart => JSON.parse(chart)));
+      setCharts(await getCharts());
     }
     loadCharts();
   }, [successfulLoad]);

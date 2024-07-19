@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Workspace = sequelize.define("Workspace", {
-    workspaceID: {
+  const Chart = sequelize.define("Chart", {
+    chartID: {
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,
@@ -9,10 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    isPublic: {
-      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     userID: {
@@ -24,10 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Workspace.associate = models => {
-    Workspace.belongsTo(models.User, { as: "user", foreignKey: "userID" });
-    Workspace.hasMany(models.Chart, { as: "charts", foreignKey: "workspaceID" });
+  Chart.associate = models => {
+    Chart.belongsTo(models.Workspace, { as: "workspace", foreignKey: "workspaceID" });
   };
 
-  return Workspace;
+  return Chart;
 };

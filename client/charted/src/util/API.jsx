@@ -47,11 +47,33 @@ export async function createWorkspace(data) {
     });
 }
 
-export async function createChart(workspaceID, chartName) {
-  return fetch(`http://142.93.148.156:80/u/assets/c/create?workspaceID=${workspaceID}&chartName=${chartName}`, {
-    method: "POST",
-  }).then(response => {
-    return response.json();
+export async function getWorkspaceData(workspaceID) {
+  return api
+  .post(`/workspace/getData`, {
+    workspaceID
+  })
+  .then(response => {
+    return response.data;
+  });
+}
+
+export async function createChart(data) {
+  return api
+  .post(`/charts/create`, {
+    data
+  })
+  .then(response => {
+    return response.data;
+  });
+}
+
+export async function getCharts(data) {
+  return api
+  .post(`/charts/create`, {
+    data
+  })
+  .then(response => {
+    return response.data;
   });
 }
 
@@ -118,14 +140,6 @@ export async function getAllUserWorkspaces(userID) {
 //     return response.json();
 //   });
 // }
-
-export async function getWorkspaceData(workspaceID) {
-  return fetch(`http://142.93.148.156:80/u/w/${workspaceID}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
-}
 
 export async function authenticateWorkspace(userID, workspaceID) {
   try {
