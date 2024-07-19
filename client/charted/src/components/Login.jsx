@@ -1,9 +1,9 @@
 import FormInput from "./inputs/FormInput";
 import { useState } from "react";
 import "./css/LoginRegister.css";
+import { login } from "../util/API";
 import { setCookie } from "../util/CookieManager";
-import { loginUser, getErrorMessage } from "../util/LoginUtil";
-import { validateLogin } from "../util/API";
+import { loginUser } from "../util/LoginUtil";
 
 export default function Login() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -14,15 +14,17 @@ export default function Login() {
     e.preventDefault();
     setErrorMessage("");
 
-    const formElements = Object.fromEntries(new FormData(e.target));
-    const validateLoginPromise = await validateLogin(formElements.email, formElements.password);
+    const formData = new FormData(e.target);
+    const accountData = Object.fromEntries(formData);
 
-    if (validateLoginPromise.status == "true") {
-      await loginUser(validateLoginPromise, formElements.email);
-      location.href = "/u";
-    } else {
-      setErrorMessage(getErrorMessage(validateLoginPromise));
+    const loginErrorMessage = await loginUser(accountData);
+    
+    if (loginErrorMessage != "") {
+      setErrorMessage(loginErrorMessage);
+      return;
     }
+
+    location.href = '/u';
 
     setDisableSubmit(false);
   }

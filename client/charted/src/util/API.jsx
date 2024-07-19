@@ -1,64 +1,50 @@
 import axios from "axios";
 
-// export async function registerAccount(data) {
-//   return fetch(`http://142.93.148.156:80/u/signin/register?`, {
-//     method: "POST",
-//     body: data,
-//   })
-//     .then(response => {
-//       return response.json();
-//     })
-//     .catch(error => {
-//       return;
-//     });
-// }
+const api = axios.create({
+  baseURL: "http://localhost:3000", // Update with your backend URL
+  withCredentials: true, // This is essential for sending cookies
+});
 
 export async function registerAccount(data) {
-  return axios
-    .post("http://localhost:3000/auth/register", data)
+  return api
+    .post("/auth/register", data)
     .then(res => {
-      return res.json();
+      return res;
+    })
+    .catch(err => {
+      console.log(err);
+      return Promise.reject(err.response);
+    });
+}
+
+export async function login(data) {
+  return api
+    .post("/auth/login", data, {
+      withCredentials: true,
+    })
+    .then(data => {
+      console.log(data);
+      return data;
     })
     .catch(err => {
       return Promise.reject(err.response);
     });
 }
 
-export async function validateLogin(email, password) {
-  return fetch(`http://142.93.148.156:80/u/signin/auth/validate?email=${email}&password=${password}`, {
-    method: "GET",
-  })
+export async function getWorkspacesDisplay() {
+  return api
+    .get(`/workspace/getDisplay`)
     .then(response => {
-      if (response.ok) {
-        return response.json(); // Returns promise
-      }
-      return Promise.reject(response); // Not ok then reject promise --
-    })
-    .then(data => {
-      return data; // Return data (userID and username) if all is good
-    })
-    .catch(error => {
-      return error; // Catch rejected promise and send back error --
+      return response.data;
     });
 }
 
-export async function getLoginToken(userID) {
-  return fetch(`http://142.93.148.156:80/u/signin/auth/get/token?&userID=${userID}`, {
-    method: "GET",
-  }).then(response => {
-    if (response.ok) {
-      return response.json(); // Returns promise
-    }
-    return Promise.reject(response);
-  });
-}
-
-export async function createWorkspace(userID, workspaceName, isPublic) {
-  return fetch(`http://142.93.148.156:80/u/assets/w/create?userID=${userID}&workspaceName=${workspaceName}&isPublic=${isPublic}`, {
-    method: "POST",
-  }).then(response => {
-    return response.json();
-  });
+export async function createWorkspace(data) {
+  return api
+    .post(`/workspace/create`, data)
+    .then(response => {
+      return response;
+    });
 }
 
 export async function createChart(workspaceID, chartName) {
@@ -132,14 +118,6 @@ export async function getAllUserWorkspaces(userID) {
 //     return response.json();
 //   });
 // }
-
-export async function getWorkspacesDisplay(userID) {
-  return fetch(`http://142.93.148.156:80/u/get/workspaces/display/userid?userID=${userID}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
-}
 
 export async function getWorkspaceData(workspaceID) {
   return fetch(`http://142.93.148.156:80/u/w/${workspaceID}`, {

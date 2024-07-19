@@ -4,9 +4,6 @@ import gear from "../assets/gear.svg";
 import logout from "../assets/logout.svg";
 import downarrow from "../assets/dropdown.svg";
 import { deleteCookie, getCookie } from "../util/CookieManager";
-import { nullifyToken } from "../util/API";
-
-
 
 export default function Navbar( {username}) {
 

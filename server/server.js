@@ -3,14 +3,26 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const db = require("./models");
-const authRoutes = require("./routes/auth");
 const cors = require("cors");
 
-app.use(cors());
+const authRoutes = require("./routes/auth");
+const workspaceRoutes = require("./routes/workspace");
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+    optionSuccessStatus: 200,
+  })
+);
+
 app.use("/auth", authRoutes);
+app.use("/workspace", workspaceRoutes);
+
+const PORT = 3000;
 
 db.sequelize.sync().then(() => {
-  app.listen(3000, () => {
-    console.log("Server running on 3000...");
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running at http://0.0.0.0:${PORT}/`);
   });
 });

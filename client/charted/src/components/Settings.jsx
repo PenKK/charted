@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import "./css/settings.css";
 import { getCookie, setCookie } from "../util/CookieManager";
-import { changeAccountEmail, changeAccountPassword, changeAccountUsername, validateLogin } from "../util/API";
+import { changeAccountEmail, changeAccountPassword, changeAccountUsername, login } from "../util/API";
 import spinner from "../assets/spinner.svg";
 import check from "../assets/check.svg";
 import x from "../assets/x.svg";

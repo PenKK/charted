@@ -2,33 +2,43 @@ const express = require("express");
 const router = express.Router();
 const { User, Sequelize } = require("../models");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const dayjs = require("dayjs");
 
 router.use(express.json());
+
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = req.headers["cookie"]
+    .split(`; `)
+    .find(row => row.startsWith("api-auth="))
+    .split("=")[1];
 
   if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET),
-    (err, user) => {
-      if (err) return res.sendStatus(403);
-      req.user = user;
-      next();
-    };
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      console.error("Error verifying token:", err);
+      return res.sendStatus(401);
+    }
+
+    req.user = user;
+    next();
+  });
 }
 
 router.post("/register", async (req, res) => {
+  const { username, password, email } = req.body;
   const userObject = {
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
+    username,
+    email,
+    password: password && (await bcrypt.hash(password, 10)),
   };
 
   try {
     await User.create(userObject);
     res.send("Account created successfully");
   } catch (err) {
+    console.log(err);
     if (err instanceof Sequelize.UniqueConstraintError) {
       if (err.errors[0].path === "username") {
         return res.status(409).send("Username already exists. Please choose a different username.");
@@ -50,14 +60,33 @@ router.get("/getPass", authenticateToken, (req, res) => {
   });
 });
 
-router.get("/login", (req, res) => {
-  const loginData = {
-    email: req.body.email,
-    password: req.body.password,
-  };
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
 
-  const accessToken = jwt.sign({ username: loginData.username }, process.env.ACCESS_TOKEN_SECRET);
-  res.json({ accessToken: accessToken });
+  const user = await User.findOne({
+    where: { email },
+  });
+
+  if (!user) {
+    return res.status(404).send("Invalid email or password");
+  }
+
+  const passwordValid = await bcrypt.compare(password, user.password);
+
+  if (!passwordValid) {
+    return res.status(404).send("Invalid email or password");
+  }
+  console.log(user.id);
+  const jwtToken = jwt.sign({ userID: user.userID }, process.env.ACCESS_TOKEN_SECRET);
+
+  res.cookie("api-auth", jwtToken, {
+    secure: false,
+    httpOnly: true,
+    expires: dayjs().add(7, "days").toDate(),
+  });
+
+  res.status(201).json({ message: `Login successful`, username: user.username });
 });
 
 module.exports = router;
+module.exports.authenticateToken = authenticateToken;

@@ -8,7 +8,7 @@ import { createWorkspace, getWorkspacesDisplay } from "../util/API";
 import { isOverflown } from "../util/Util";
 
 export default function UserHome() {
-  if (getCookie("userID") == null) {
+  if (getCookie("username") == null) {
     return;
   }
 
@@ -23,12 +23,13 @@ export default function UserHome() {
     e.preventDefault();
     setDisableModalSubmit(true);
 
-    const formElements = Object.fromEntries(new FormData(e.target));
+    const formEntries = Object.fromEntries(new FormData(e.target));
+
     try {
-      const workspaceCreationJ = await createWorkspace(getCookie("userID"), formElements.name, formElements.isPublic);
-      if (workspaceCreationJ.status == "success") {
-        location.href = `/u/w/${workspaceCreationJ.id}`;
-      }
+      const workspaceCreation = await createWorkspace(formEntries);
+      // if (workspaceCreation.status == "success") {
+      //   location.href = `/u/w/${workspaceCreation.id}`;
+      // }
     } catch (error) {
       setModalErrorMessage("Server error, please try again later");
       setDisableModalSubmit(false);
@@ -37,10 +38,10 @@ export default function UserHome() {
 
   async function updateWorkspaces() {
     try {
-      const workspacesString = await getWorkspacesDisplay(getCookie("userID"));
-      const workspacesJSON = workspacesString.map(string => JSON.parse(string));
-      setWorkspaces(workspacesJSON);
-      setFirstWorkspace({ name: "New workspace", enabled: "true" });
+      const workspacesString = await getWorkspacesDisplay();
+      console.log(workspacesString);
+      setWorkspaces(workspacesString);
+      setFirstWorkspace({ name: "New workspace", isPublic: "", enabled: "true" });
     } catch (error) {
       setFirstWorkspace({ name: "Server error", isPublic: "Please try again later", enabled: "false" });
     }
@@ -91,7 +92,12 @@ export default function UserHome() {
               {firstWorkspace.enabled == "true" && <img src={plus} alt="" height={30} />}
             </Workspace>
             {workspaces.toReversed().map(workspace => (
-              <Workspace isPublic={workspace.isPublic} title={workspace.name} key={workspace.id} onClick={workspace.id >= 0 ? () => (location.href = `/u/w/${workspace.id}`) : null} />
+              <Workspace
+                isPublic={workspace.isPublic}
+                title={workspace.name}
+                key={workspace.workspaceID}
+                onClick={workspace.workspaceID >= 0 ? () => (location.href = `/u/workspace/${workspace.workspaceID}`) : null}
+              />
             ))}
           </div>
         </div>
@@ -137,7 +143,7 @@ export default function UserHome() {
         </div>
         {props.children}
         <div className="workspace-privacy">
-          <h6>{props.isPublic === "true" ? "Public" : props.isPublic === "false" ? "Private" : props.isPublic}</h6>
+          <h6>{props.id != -1 ? props.isPublic ? "Public" : "Private" : ""}</h6>
         </div>
       </div>
     );

@@ -25,7 +25,7 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/u" element={<UserHome />} />
             <Route path="/u/settings" element={<Settings setNavBarUsername={setNavbarUsername} />} />
-            <Route path="/u/w/:id" element={<Workspace />} />
+            <Route path="/u/workspace/:id" element={<Workspace />} />
           </Routes>
         </BrowserRouter>
       </div>

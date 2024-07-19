@@ -1,18 +1,26 @@
-import { getLoginToken, validateLogin } from "./API";
+import { login } from "./API";
 import { setCookie } from "./CookieManager";
 
-export async function loginUser(loginPromise, email) {
-  const tokenPromise = await getLoginToken(loginPromise.id);
-  setCookie("username", loginPromise.username, tokenPromise.expire);
-  setCookie("token", tokenPromise.token, tokenPromise.expire);
-  setCookie("userID", loginPromise.id, tokenPromise.expire);
-  setCookie("tokenExpiry", tokenPromise.expire, tokenPromise.expire);
-  setCookie("email", email, tokenPromise.expire);
+export async function loginUser(formData) {
+  try {
+    const loginRequest = await login(formData);
+    setCookie("username", loginRequest.data.username);
+  } catch (err) {
+    console.log(err);
+    return err.data;
+  }
+
+  return "";
 }
 
 export async function loginAfterRegister(email, password) {
-  const validateLoginPromise = await validateLogin(email, password);
-  await loginUser(validateLoginPromise, email);
+  const validateLoginPromise = await login(email, password);
+
+  try {
+    await loginUser(validateLoginPromise, email);
+  } catch (err) {
+    return new Error(err.data);
+  }
 }
 
 export function getErrorMessage(erroredLoginPromise) {
