@@ -15,7 +15,19 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
   const descriptionAreaRef = useRef(null);
 
-  console.log(charts);
+  async function handleChartSubmit(e) {
+    e.preventDefault();
+    const formElements = Object.fromEntries(new FormData(e.target));
+    formElements.workspaceID = workspaceID;
+    formElements.name = formElements.chartName;
+
+    let tempID = -new Date().getUTCMilliseconds();
+
+    createClientChart(formElements.chartName, tempID);
+    const chartCreation = await createChart(formElements);
+    console.log(chartCreation);
+    updateClientChartID(tempID, chartCreation.chartID);
+  }
 
   useEffect(() => {
     const keyPressEvent = e => {
@@ -138,17 +150,6 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
         {props.label}
       </button>
     );
-  }
-
-  async function handleChartSubmit(e) {
-    e.preventDefault();
-    const formElements = Object.fromEntries(new FormData(e.target));
-    let tempID = -new Date().getUTCMilliseconds();
-
-    // createClientChart(formElements);
-    console.log(formElements);
-    // const chartCreation = await createChart();
-    // updateClientChartID(tempID, newChartID);
   }
 
   async function handleItemSubmit(e) {

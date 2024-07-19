@@ -3,7 +3,7 @@ import "./css/Workspace.css";
 import chart from "../assets/chart.svg";
 import question from "../assets/question.svg";
 import { useEffect, useRef, useState } from "react";
-import { getWorkspaceData, getCharts } from "../util/API";
+import { getWorkspaceData, getWorkspaceCharts } from "../util/API";
 import { getCookie } from "../util/CookieManager";
 import { isOverflown } from "../util/Util";
 import ChartArea from "./ChartArea";
@@ -58,9 +58,9 @@ export default function Workspace() {
 
   useEffect(() => {
     async function loadCharts() {
-      setCharts(await getCharts());
+      setCharts(await getWorkspaceCharts());
     }
-    loadCharts();
+    // loadCharts();
   }, [successfulLoad]);
 
   return (

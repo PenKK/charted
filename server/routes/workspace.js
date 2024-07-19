@@ -18,12 +18,13 @@ router.get("/getDisplay", authenticateToken, async (req, res) => {
 router.post("/create", authenticateToken, async (req, res) => {
   const { name, isPublic } = req.body;
   await Workspace.create({ name, isPublic, userID: req.user.userID });
+
+  res.status(201).send("Workspace successfuly created");
 });
 
-router.post("/getData", authenticateToken, async (req, res) => {
-  const { workspaceID } = req.body;
+router.get("/getData/:workspaceID", authenticateToken, async (req, res) => {
   const data = await Workspace.findOne({
-    where: { workspaceID },
+    where: { WorkspaceID: req.params.workspaceID },
   });
 
   try {
@@ -36,5 +37,11 @@ router.post("/getData", authenticateToken, async (req, res) => {
 
   res.status(200).json(data);
 });
+
+router.get("/getCharts/:workspaceID", authenticateToken, async (req, res) => {
+  workspace = Workspace.findOne({
+    where: { WorkspaceID: req.params.workspaceID }
+  })
+})
 
 module.exports = router;

@@ -36,7 +36,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   User.associate = models => {
-    User.hasMany(models.Workspace, { as: "workspaces", foreignKey: "userID" });
+    User.hasMany(models.Workspace, { as: "workspaces", foreignKey: { name: "userID", allowNull: false } });
+    User.hasMany(models.Chart, { as: "charts", foreignKey: { name: "userID", allowNull: false } });
   };
 
   return User;

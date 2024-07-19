@@ -11,17 +11,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    userID: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "Users",
-        key: "userID",
-      },
+    items: {
+      type: DataTypes.JSON,
+      defaultValue: {},
+      allowNull: false,
     },
   });
 
   Chart.associate = models => {
-    Chart.belongsTo(models.Workspace, { as: "workspace", foreignKey: "workspaceID" });
+    Chart.belongsTo(models.Workspace, { as: "workspace", foreignKey: { name: "workspaceID", allowNull: false } });
+    Chart.belongsTo(models.User, { as: "user", foreignKey: { name: "userID", allowNull: false } });
   };
 
   return Chart;

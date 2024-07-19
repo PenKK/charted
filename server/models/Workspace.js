@@ -15,18 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
-    userID: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: "Users",
-        key: "userID",
-      },
-    },
   });
 
   Workspace.associate = models => {
-    Workspace.belongsTo(models.User, { as: "user", foreignKey: "userID" });
-    Workspace.hasMany(models.Chart, { as: "charts", foreignKey: "workspaceID" });
+    Workspace.belongsTo(models.User, { as: "user", foreignKey: { name: "userID", allowNull: false } });
+    Workspace.hasMany(models.Chart, { as: "charts", foreignKey: { name: "workspaceID", allowNull: false } });
   };
 
   return Workspace;

@@ -32,49 +32,37 @@ export async function login(data) {
 }
 
 export async function getWorkspacesDisplay() {
-  return api
-    .get(`/workspace/getDisplay`)
-    .then(response => {
-      return response.data;
-    });
+  return api.get(`/workspace/getDisplay`).then(response => {
+    return response.data;
+  });
 }
 
 export async function createWorkspace(data) {
-  return api
-    .post(`/workspace/create`, data)
-    .then(response => {
-      return response;
-    });
+  return api.post(`/workspace/create`, data).then(response => {
+    return response;
+  });
 }
 
 export async function getWorkspaceData(workspaceID) {
-  return api
-  .post(`/workspace/getData`, {
-    workspaceID
-  })
-  .then(response => {
+  return api.get(`/workspace/getData/${workspaceID}`).then(response => {
     return response.data;
   });
 }
 
 export async function createChart(data) {
-  return api
-  .post(`/charts/create`, {
-    data
-  })
-  .then(response => {
+  return api.post(`/chart/create`, data).then(response => {
     return response.data;
   });
 }
 
-export async function getCharts(data) {
+export async function getWorkspaceCharts(workspaceID) {
   return api
-  .post(`/charts/create`, {
-    data
-  })
-  .then(response => {
-    return response.data;
-  });
+    .get(`/workspace/getCharts/${workspaceID}`, {
+      data,
+    })
+    .then(response => {
+      return response.data;
+    });
 }
 
 export async function createItem(chartID, itemName, description) {
