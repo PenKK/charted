@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { authenticateToken } = require("./auth");
-const { Workspace } = require("../models");
+const { Workspace, Chart } = require("../models");
 
 router.use(express.json());
 
@@ -17,9 +17,9 @@ router.get("/getDisplay", authenticateToken, async (req, res) => {
 
 router.post("/create", authenticateToken, async (req, res) => {
   const { name, isPublic } = req.body;
-  await Workspace.create({ name, isPublic, userID: req.user.userID });
+  const workspace = await Workspace.create({ name, isPublic, userID: req.user.userID });
 
-  res.status(201).send("Workspace successfuly created");
+  res.status(201).json( {workspaceID: workspace.workspaceID,message: "Workspace successfuly created"});
 });
 
 router.get("/getData/:workspaceID", authenticateToken, async (req, res) => {
@@ -39,9 +39,21 @@ router.get("/getData/:workspaceID", authenticateToken, async (req, res) => {
 });
 
 router.get("/getCharts/:workspaceID", authenticateToken, async (req, res) => {
-  workspace = Workspace.findOne({
-    where: { WorkspaceID: req.params.workspaceID }
-  })
-})
+  console.log(req.params.workspaceID);
+
+  const workspace = await Workspace.findOne({
+    where: { WorkspaceID: req.params.workspaceID, UserID: req.user.userID },
+  });
+
+  if (workspace == null) {
+    res.status(404).json({ message: "Workspace does not exist or you are unauthorized" });
+  }
+
+  const charts = await Chart.findAll({
+    where: { workspaceID: workspace.workspaceID },
+  });
+
+  res.status(200).json(charts);
+});
 
 module.exports = router;

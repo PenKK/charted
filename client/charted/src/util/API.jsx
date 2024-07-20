@@ -39,7 +39,7 @@ export async function getWorkspacesDisplay() {
 
 export async function createWorkspace(data) {
   return api.post(`/workspace/create`, data).then(response => {
-    return response;
+    return response.data;
   });
 }
 
@@ -56,13 +56,9 @@ export async function createChart(data) {
 }
 
 export async function getWorkspaceCharts(workspaceID) {
-  return api
-    .get(`/workspace/getCharts/${workspaceID}`, {
-      data,
-    })
-    .then(response => {
-      return response.data;
-    });
+  return api.get(`/workspace/getCharts/${workspaceID}`).then(response => {
+    return response.data;
+  });
 }
 
 export async function createItem(chartID, itemName, description) {
@@ -153,13 +149,13 @@ export async function getWorkspaceName(workspaceID) {
   });
 }
 
-export async function getWorkspaceCharts(workspaceID) {
-  return fetch(`http://142.93.148.156:80/u/get/charts/workspaceid?workspaceID=${workspaceID}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
-}
+// export async function getWorkspaceCharts(workspaceID) {
+//   return fetch(`http://142.93.148.156:80/u/get/charts/workspaceid?workspaceID=${workspaceID}`, {
+//     method: "GET",
+//   }).then(response => {
+//     return response.json();
+//   });
+// }
 
 export async function getChartsDisplay(workspaceID) {
   return fetch(`http://142.93.148.156:80/u/get/charts/display/workspaceid?workspaceID=${workspaceID}`, {

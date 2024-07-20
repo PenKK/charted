@@ -27,9 +27,7 @@ export default function UserHome() {
 
     try {
       const workspaceCreation = await createWorkspace(formEntries);
-      // if (workspaceCreation.status == "success") {
-      //   location.href = `/u/w/${workspaceCreation.id}`;
-      // }
+      location.href = `/u/workspace/${workspaceCreation.workspaceID}`;
     } catch (error) {
       setModalErrorMessage("Server error, please try again later");
       setDisableModalSubmit(false);
@@ -143,7 +141,7 @@ export default function UserHome() {
         </div>
         {props.children}
         <div className="workspace-privacy">
-          <h6>{props.id != -1 ? props.isPublic ? "Public" : "Private" : ""}</h6>
+          <h6>{props.id != -1 ? (props.isPublic ? "Public" : "Private") : ""}</h6>
         </div>
       </div>
     );

@@ -58,9 +58,9 @@ export default function Workspace() {
 
   useEffect(() => {
     async function loadCharts() {
-      setCharts(await getWorkspaceCharts());
+      setCharts(await getWorkspaceCharts(URL.id));
     }
-    // loadCharts();
+    loadCharts();
   }, [successfulLoad]);
 
   return (

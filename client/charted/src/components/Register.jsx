@@ -2,31 +2,31 @@ import { useState } from "react";
 import "./css/LoginRegister.css";
 import { registerAccount } from "../util/API";
 import FormInput from "./inputs/FormInput";
-import { loginAfterRegister } from "../util/LoginUtil";
+import { loginUser } from "../util/LoginUtil";
 
 export default function Register() {
   async function submitNewUser(e) {
     e.preventDefault();
-    // setDisableSubmit(true);
+    setDisableSubmit(true);
     setErrorMessage("");
 
     const formData = new FormData(e.target);
     const accountData = Object.fromEntries(formData);
-
+    
     try {
       await registerAccount(accountData);
     } catch (err) {
       setErrorMessage(err.data);
+      setDisableSubmit(false);
+      return;
     }
 
     try {
-      if (accountResult.status == "success") {
-        await loginAfterRegister(accountData.email, accountData.password);
-        location.href = "/u";
-      } else {
-        setErrorMessage("User already exists, please log in with the existing account instead");
-      }
-    } catch (error) {}
+      await loginUser(accountData);
+      location.href = "/u";
+    } catch (err) {
+      setErrorMessage("Your account has been created but login failed");
+    }
 
     setDisableSubmit(false);
   }

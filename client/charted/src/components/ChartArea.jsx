@@ -51,10 +51,10 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
       <div className="chart-container gap-3">
         {charts.map(chart => (
-          <Chart title={chart.name} id={chart.id} key={chart.id} handleSubmit={handleItemSubmit}>
-            {chart.items.map(item => (
+          <Chart title={chart.name} chartID={chart.chartID} key={chart.chartID} handleSubmit={handleItemSubmit}>
+            {/*chart.items.map(item => (
               <Item key={item.id} name={item.name} id={item.id} chartID={chart.id} description={item.description} />
-            ))}
+            ))*/}
           </Chart>
         ))}
         <Chart title={"Create new chart"} creationChart={"true"} handleSubmit={handleChartSubmit}>
@@ -127,7 +127,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
   }
 
   function openItemInfo(chartID, itemID) {
-    const chartObj = [...charts].find(chart => chart.id == chartID);
+    const chartObj = [...charts].find(chart => chart.chartID == chartID);
     const itemObj = chartObj.items.find(item => item.id == itemID);
     setCurrentItemInfo({ name: itemObj.name, description: itemObj.description, id: itemObj.id, createdDate: itemObj.createdDate, chartName: chartObj.name, chartID: chartObj.id });
     setItemInfoOpen(true);
@@ -189,11 +189,11 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     }
 
     return (
-      <div className="chart" onDrop={e => handleOnDrop(e, props.id)} onDragOver={props.creationChart ? null : handleDragOver}>
+      <div className="chart" onDrop={e => handleOnDrop(e, props.chartID)} onDragOver={props.creationChart ? null : handleDragOver}>
         <div className="chart-bg">
           <div className="chart-header-container">
             <h4 className="chart-header">{props.title}</h4>
-            {!props.creationChart && <img src={exit} className="chart-exit-icon" role="button" onClick={() => handleDeleteChart(props.id)} />}
+            {!props.creationChart && <img src={exit} className="chart-exit-icon" role="button" onClick={() => handleDeleteChart(props.chartID)} />}
           </div>
           <span className="d-flex justify-content-center w-100">
             <img className={` scroll-icon scroll-icon ${!scrollIconUp && "opacity-0"}`} src={triangle} alt="" />
@@ -206,7 +206,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
           </span>
 
           <form onSubmit={props.handleSubmit} className="d-flex justify-content-center">
-            <input type="text" name="chartID" value={props.id} hidden readOnly />
+            <input type="text" name="chartID" value={props.chartID} hidden readOnly />
             {props.creationChart ? props.children : <input type="text" name="itemName" placeholder="New item" required className="new-item-input form-control" />}
             <input type="submit" hidden />
           </form>
@@ -220,13 +220,13 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
       <div
         role="button"
         className="chart-item"
-        draggable={!props.creationChart && props.id >= 0}
-        onDragStart={e => handleOnDrag(e, { id: -props.id, name: props.name, description: props.description }, props.chartID)}
+        draggable={!props.creationChart && props.chartID >= 0}
+        onDragStart={e => handleOnDrag(e, { id: -props.chartID, name: props.name, description: props.description }, props.chartID)}
       >
         <div className="d-flex flex-row chart-item-header-container">
           <img src={item} className="item-img" />
           <h4 className={"item-header"}>{props.name}</h4>
-          <img src={list} className="item-img" onClick={() => openItemInfo(props.chartID, props.id)} />
+          <img src={list} className="item-img" onClick={() => openItemInfo(props.chartID, props.chartID)} />
         </div>
       </div>
     );
@@ -267,15 +267,15 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
   function setClientItemDescription(chartID, itemID, newDescription) {
     let modifiedCharts = [...charts];
-    console.log(modifiedCharts.find(chart => chart.id === chartID).items.find(item => item.id === itemID));
-    modifiedCharts.find(chart => chart.id === chartID).items.find(item => item.id === itemID).description = newDescription;
+    console.log(modifiedCharts.find(chart => chart.chartID === chartID).items.find(item => item.id === itemID));
+    modifiedCharts.find(chart => chart.chartID === chartID).items.find(item => item.id === itemID).description = newDescription;
     setCharts([...modifiedCharts]);
   }
 
   function deleteClientChart(chardID) {
     let modifiedCharts = [...charts];
     modifiedCharts.splice(
-      modifiedCharts.findIndex(chart => chart.id == chardID),
+      modifiedCharts.findIndex(chart => chart.chartID == chardID),
       1
     );
     setCharts([...modifiedCharts]);
@@ -283,31 +283,32 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
   function createClientChart(chartName, chartID) {
     let modifiedCharts = charts; // Updating id only works when this is without spread operator?????????????
-    modifiedCharts.push({ name: chartName, id: chartID, createdDate: null, items: [] });
+    modifiedCharts.push({ name: chartName, chartID: chartID, createdDate: null, items: [] });
     setCharts([...modifiedCharts]);
   }
 
   function createClientItem(chartID, itemObject) {
     let modifiedCharts = [...charts];
-    modifiedCharts.find(chart => chart.id === chartID).items.push(itemObject);
+    modifiedCharts.find(chart => chart.chartID === chartID).items.push(itemObject);
     setCharts([...modifiedCharts]);
   }
 
   function updateClientItemID(chartID, itemID, newID) {
     let modifiedCharts = [...charts];
-    modifiedCharts.find(chart => chart.id === chartID).items.find(item => item.id === itemID).id = newID;
+    modifiedCharts.find(chart => chart.chartID === chartID).items.find(item => item.id === itemID).id = newID;
     setCharts([...modifiedCharts]);
   }
 
   function updateClientChartID(chartID, newID) {
     let modifiedCharts = [...charts];
-    modifiedCharts.find(chart => chart.id === chartID).id = newID;
+    console.log(modifiedCharts);
+    modifiedCharts.find(chart => chart.chartID === chartID).chartID = newID;
     setCharts([...modifiedCharts]);
   }
 
   function deleteClientItem(chartID, itemID) {
     let modifiedCharts = [...charts];
-    let targetItems = modifiedCharts.find(chart => chart.id === chartID).items;
+    let targetItems = modifiedCharts.find(chart => chart.chartID === chartID).items;
     targetItems.splice(
       targetItems.findIndex(item => item.id == itemID),
       1
