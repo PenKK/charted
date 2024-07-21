@@ -61,11 +61,17 @@ export async function getWorkspaceCharts(workspaceID) {
   });
 }
 
-export async function createItem(chartID, itemName, description) {
-  return fetch(`http://142.93.148.156:80/u/assets/i/create?chartID=${chartID}&itemName=${itemName}&description=${description}`, {
-    method: "POST",
-  }).then(response => {
-    return response.json();
+export async function createItem(data) {
+  return api.post(`/chart/createItem`, data).then(response => {
+    console.log(response);
+    return response.data;
+  });
+}
+
+export async function moveItem(data) {
+  return api.post(`/chart/moveItem`, data).then(response => {
+    console.log(response);
+    return response.data;
   });
 }
 

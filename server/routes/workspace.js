@@ -17,9 +17,13 @@ router.get("/getDisplay", authenticateToken, async (req, res) => {
 
 router.post("/create", authenticateToken, async (req, res) => {
   const { name, isPublic } = req.body;
-  const workspace = await Workspace.create({ name, isPublic, userID: req.user.userID });
 
-  res.status(201).json( {workspaceID: workspace.workspaceID,message: "Workspace successfuly created"});
+  try {
+    const workspace = await Workspace.create({ name, isPublic, userID: req.user.userID });
+    return res.status(201).json({ workspaceID: workspace.workspaceID, message: "Workspace successfuly created" });
+  } catch (err) {
+    return res.status(404).json({ message: "An unexpected error occured" });
+  }
 });
 
 router.get("/getData/:workspaceID", authenticateToken, async (req, res) => {
@@ -29,10 +33,10 @@ router.get("/getData/:workspaceID", authenticateToken, async (req, res) => {
 
   try {
     if (data.userID != req.user.userID) {
-      res.status(403).send("You do not have access to this workspace");
+      return res.status(403).send("You do not have access to this workspace");
     }
   } catch (err) {
-    res.status(404).send("Workspace not found");
+    return res.status(404).send("Workspace not found");
   }
 
   res.status(200).json(data);
@@ -46,7 +50,7 @@ router.get("/getCharts/:workspaceID", authenticateToken, async (req, res) => {
   });
 
   if (workspace == null) {
-    res.status(404).json({ message: "Workspace does not exist or you are unauthorized" });
+    return res.status(404).json({ message: "Workspace does not exist or you are unauthorized" });
   }
 
   const charts = await Chart.findAll({

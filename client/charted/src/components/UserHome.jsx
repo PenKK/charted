@@ -8,7 +8,8 @@ import { createWorkspace, getWorkspacesDisplay } from "../util/API";
 import { isOverflown } from "../util/Util";
 
 export default function UserHome() {
-  if (getCookie("username") == null) {
+  if (getCookie("username" || getCookie("api-auth")) == null) {
+    location.href = "/";
     return;
   }
 

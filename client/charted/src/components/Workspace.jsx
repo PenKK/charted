@@ -26,7 +26,7 @@ export default function Workspace() {
         setWorkspaceName(workspaceData.name);
         setSuccessfulLoad(true);
       } catch(err) {
-
+        
       }
 
 
@@ -61,6 +61,7 @@ export default function Workspace() {
       setCharts(await getWorkspaceCharts(URL.id));
     }
     loadCharts();
+    console.log(charts);
   }, [successfulLoad]);
 
   return (

@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     items: {
       type: DataTypes.JSON,
-      defaultValue: {},
+      defaultValue: [],
       allowNull: false,
     },
   });

@@ -5,9 +5,8 @@ import logout from "../assets/logout.svg";
 import downarrow from "../assets/dropdown.svg";
 import { deleteCookie, getCookie } from "../util/CookieManager";
 
-export default function Navbar( {username}) {
-
-  const loggedIn = (username == null || username == "") ? false : true;
+export default function Navbar({ username }) {
+  const loggedIn = username == null || username == "" ? false : true;
 
   return (
     <nav className="navbar navbar-expand">
@@ -64,10 +63,6 @@ function DropdownMenu() {
         func={async () => {
           try {
             deleteCookie("username");
-            deleteCookie("email")
-            deleteCookie("tokenExpiry");
-            deleteCookie("userID");
-            deleteCookie("token");
             nullifyToken(getCookie("userID"));
           } finally {
             location.href = "/";

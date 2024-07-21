@@ -17,8 +17,18 @@ function authenticateToken(req, res, next) {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
-      console.error("Error verifying token:", err);
-      return res.sendStatus(401);
+      res.cookie("api-auth", "", {
+        secure: false,
+        httpOnly: true,
+        expires: dayjs().toDate(),
+      });
+
+      res.cookie("username", "", {
+        secure: false,
+        expires: dayjs().toDate(),
+      });
+
+      return res.sendStatus(401).send("Invalid api-auth key");
     }
 
     req.user = user;
