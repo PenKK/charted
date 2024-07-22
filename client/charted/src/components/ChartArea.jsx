@@ -233,7 +233,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
   function handleDeleteChart(chartID) {
     deleteClientChart(chartID);
-    deleteChart(chartID);
+    deleteChart({chartID});
   }
 
   function handleOnDrag(e, itemObject, chartID) {
@@ -257,11 +257,9 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     deleteClientItem(fromChartID, itemObject.itemID); // Delete from old chart (client)
 
     const moveDBItem = await moveItem({ toChartID: onDropChartID, itemID: itemObject.itemID, fromChartID})
-
-    // updateClientItemID(onDropChartID, itemObject.id, newItemID); // Give the client item with old id the new id
   }
-  /************************************************************************************************************** 
-    CLIENT DISPLAY UTIL */
+  
+  /* CLIENT DISPLAY UTIL */
 
   function setClientItemDescription(chartID, itemID, newDescription) {
     let modifiedCharts = [...charts];

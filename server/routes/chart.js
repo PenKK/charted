@@ -39,6 +39,24 @@ router.post("/create", authenticateToken, async (req, res) => {
   }
 });
 
+router.post("/delete", authenticateToken, async (req, res) => {
+  const { chartID } = req.body;
+
+  const chart = await Chart.findOne({ where: { chartID } });
+
+  if (chart == null) {
+    return res.status(404).send("Could not delete the chart as it was not found");
+  }
+
+  if (chart.userID != req.user.userID) {
+    return res.status(401).send("You are not authorized to delete this chart");
+  }
+
+  chart.destroy();
+
+  res.status(200).send(`Chart with ID ${chartID} has been deleted`);
+});
+
 router.post("/createItem", authenticateToken, async (req, res) => {
   const { name, chartID } = req.body;
 

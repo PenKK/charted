@@ -55,6 +55,12 @@ export async function createChart(data) {
   });
 }
 
+export async function deleteChart(data) {
+  return api.post(`/chart/delete`, data).then(response => {
+    return response.data;
+  });
+}
+
 export async function getWorkspaceCharts(workspaceID) {
   return api.get(`/workspace/getCharts/${workspaceID}`).then(response => {
     return response.data;
@@ -189,14 +195,6 @@ export async function setItemDescription(itemID, description) {
 
 export async function deleteItem(itemID) {
   return fetch(`http://142.93.148.156:80/u/delete/item/itemid?itemID=${itemID}`, {
-    method: "POST",
-  }).then(response => {
-    return response.json();
-  });
-}
-
-export async function deleteChart(chartID) {
-  return fetch(`http://142.93.148.156:80/u/delete/chart/chartid?chartID=${chartID}`, {
     method: "POST",
   }).then(response => {
     return response.json();
