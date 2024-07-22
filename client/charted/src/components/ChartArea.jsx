@@ -50,13 +50,13 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
       <div className="chart-container gap-3">
         {charts.map(chart => (
-          <Chart title={chart.name} chartID={chart.chartID} key={chart.chartID} handleSubmit={handleItemSubmit}>
+          <Chart title={chart.name} chartID={chart.chartID} key={chart.chartID}>
             {chart.items.map(item => (
               <Item key={item.itemID} name={item.name} itemID={item.itemID} chartID={chart.chartID} description={item.description} />
             ))}
           </Chart>
         ))}
-        <Chart title={"Create new chart"} creationChart={"true"} handleSubmit={handleChartSubmit}>
+        <Chart title={"Create new chart"} creationChart={"true"}>
           <input name="chartName" type="text" className="new-item-input form-control" placeholder="Chart name" />
         </Chart>
         <div className="horizontal-padding-bruh"></div>
@@ -151,16 +151,6 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     );
   }
 
-  async function handleItemSubmit(e) {
-    e.preventDefault();
-    const formData = Object.fromEntries(new FormData(e.target));
-    let tempID = -new Date().getUTCMilliseconds();
-
-    createClientItem(formData.chartID, { name: formData.name, itemID: tempID, description: "" });
-    const itemCreation = await createItem(formData);
-    updateClientItemID(formData.chartID, tempID, itemCreation.itemID);
-  }
-
   function Chart(props) {
     const [scrollIconUp, setScrollIconUp] = useState(false);
     const [scrollIconDown, setScrollIconDown] = useState(false);
@@ -187,6 +177,16 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
       }
     }
 
+    async function handleItemSubmit(e) {
+      e.preventDefault();
+      const formData = Object.fromEntries(new FormData(e.target));
+      let tempID = -new Date().getUTCMilliseconds();
+
+      createClientItem(formData.chartID, { name: formData.name, itemID: tempID, description: "" });
+      const itemCreation = await createItem(formData);
+      updateClientItemID(formData.chartID, tempID, itemCreation.itemID);
+    }
+
     return (
       <div className="chart" onDrop={e => handleOnDrop(e, props.chartID)} onDragOver={props.creationChart ? null : handleDragOver}>
         <div className="chart-bg">
@@ -204,7 +204,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
             <img className={`scroll-icon scroll-icon-down ${!scrollIconDown && "opacity-0"}`} src={triangle} alt="" />
           </span>
 
-          <form onSubmit={props.handleSubmit} className="d-flex justify-content-center">
+          <form onSubmit={props.creationChart ? handleChartSubmit : handleItemSubmit} className="d-flex justify-content-center">
             <input type="text" name="chartID" value={props.chartID} hidden readOnly />
             {props.creationChart ? props.children : <input type="text" name="name" placeholder="New item" required className="new-item-input form-control" />}
             <input type="submit" hidden />
@@ -233,7 +233,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
   function handleDeleteChart(chartID) {
     deleteClientChart(chartID);
-    deleteChart({chartID});
+    deleteChart({ chartID });
   }
 
   function handleOnDrag(e, itemObject, chartID) {
@@ -256,9 +256,9 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     createClientItem(onDropChartID, itemObject); // Create duplicate item (client), atp the new item will have old id
     deleteClientItem(fromChartID, itemObject.itemID); // Delete from old chart (client)
 
-    const moveDBItem = await moveItem({ toChartID: onDropChartID, itemID: itemObject.itemID, fromChartID})
+    const moveDBItem = await moveItem({ toChartID: onDropChartID, itemID: itemObject.itemID, fromChartID });
   }
-  
+
   /* CLIENT DISPLAY UTIL */
 
   function setClientItemDescription(chartID, itemID, newDescription) {
