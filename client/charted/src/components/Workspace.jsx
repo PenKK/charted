@@ -20,16 +20,11 @@ export default function Workspace() {
 
   useEffect(() => {
     async function loadWorkspaceData() {
-
       try {
         const workspaceData = await getWorkspaceData(URL.id);
         setWorkspaceName(workspaceData.name);
         setSuccessfulLoad(true);
-      } catch(err) {
-        
-      }
-
-
+      } catch (err) {}
 
       // const authenticationResult = await authenticateWorkspace(URL.id);
       // switch (authenticationResult) {
@@ -61,7 +56,6 @@ export default function Workspace() {
       setCharts(await getWorkspaceCharts(URL.id));
     }
     loadCharts();
-    console.log(charts);
   }, [successfulLoad]);
 
   return (

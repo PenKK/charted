@@ -116,4 +116,18 @@ router.post("/moveItem", authenticateToken, async (req, res) => {
   res.send(200);
 });
 
+router.post("/changeDescription", authenticateToken, async (req, res) => {
+  const { itemID, chartID, newDescription } = req.body;
+
+  const chart = await Chart.findOne({
+    where: { chartID, userID: req.user.userID },
+  });
+
+  chart.items.find(item => item.itemID == itemID).description = newDescription;
+  chart.changed("items", true);
+  chart.save();
+
+  return res.status(200).json({ message: "Successfully updated description of item" });
+});
+
 module.exports = router;

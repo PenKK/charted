@@ -11,7 +11,7 @@ import { isOverflown } from "../util/Util";
 
 export default function ChartArea({ workspaceID, charts, setCharts }) {
   const [itemInfoOpen, setItemInfoOpen] = useState(false);
-  const [currentItemInfo, setCurrentItemInfo] = useState({ name: "", description: "", id: "", createdDate: "", chartName: "", chartID: "" });
+  const [currentItemInfo, setCurrentItemInfo] = useState({});
 
   const descriptionAreaRef = useRef(null);
 
@@ -76,7 +76,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
                 <img src={card} className="item-details-title-card" />
                 <h4>{currentItemInfo.name}</h4>
                 <h6 className="font-color-1">
-                  &nbsp;in chart <u>{currentItemInfo.chartName}</u>
+                  &nbsp;in <u>{currentItemInfo.chartName}</u>
                 </h6>
               </div>
               <img src={exit} role="button" className="desc-exit" onClick={() => setItemInfoOpen(false)} />
@@ -126,16 +126,17 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
   }
 
   function openItemInfo(chartID, itemID) {
-    const chartObj = [...charts].find(chart => chart.chartID == chartID);
-    const itemObj = chartObj.items.find(item => item.id == itemID);
-    setCurrentItemInfo({ name: itemObj.name, description: itemObj.description, id: itemObj.id, createdDate: itemObj.createdDate, chartName: chartObj.name, chartID: chartObj.id });
+    const chart = charts.find(chart => chart.chartID == chartID);
+    const item = chart.items.find(item => item.itemID == itemID);
+    console.log(item);
+    setCurrentItemInfo({ ...item, chartID, chartName: chart.name });
     setItemInfoOpen(true);
   }
 
   async function saveDescription() {
     const newDescription = descriptionAreaRef.current.value;
     setCurrentItemInfo({ ...currentItemInfo, description: newDescription });
-    setClientItemDescription(currentItemInfo.chartID, currentItemInfo.id, newDescription);
+    setClientItemDescription(currentItemInfo.chartID, currentItemInfo.itemID, newDescription);
     console.log(await setItemDescription(currentItemInfo.id, newDescription));
   }
 
@@ -225,7 +226,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
         <div className="d-flex flex-row chart-item-header-container">
           <img src={item} className="item-img" />
           <h4 className={"item-header"}>{props.name}</h4>
-          <img src={list} className="item-img" onClick={() => openItemInfo(props.chartID, props.chartID)} />
+          <img src={list} className="item-img" onClick={() => openItemInfo(props.chartID, props.itemID)} />
         </div>
       </div>
     );
@@ -263,7 +264,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
   function setClientItemDescription(chartID, itemID, newDescription) {
     let modifiedCharts = [...charts];
-    modifiedCharts.find(chart => chart.chartID === chartID).items.find(item => item.id === itemID).description = newDescription;
+    modifiedCharts.find(chart => chart.chartID === chartID).items.find(item => item.itemID === itemID).description = newDescription;
     setCharts([...modifiedCharts]);
   }
 
