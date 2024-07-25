@@ -82,7 +82,13 @@ export async function moveItem(data) {
 }
 
 export async function setItemDescription(data) {
-  return api.post(`/chart/moveItem`, data).then(response => {
+  return api.post(`/chart/changeDescription`, data).then(response => {
+    return response.data;
+  });
+}
+
+export async function deleteItem(itemID, chartID) {
+  return api.post(`/chart/deleteItem`, { itemID, chartID }).then(response => {
     return response.data;
   });
 }
@@ -186,14 +192,6 @@ export async function getChartsDisplay(workspaceID) {
 export async function setItemName(itemID, newName) {
   return fetch(`http://142.93.148.156:80/u/set/item/name/itemID?itemID=${itemID}&name=${newName}`, {
     method: "GET",
-  }).then(response => {
-    return response.json();
-  });
-}
-
-export async function deleteItem(itemID) {
-  return fetch(`http://142.93.148.156:80/u/delete/item/itemid?itemID=${itemID}`, {
-    method: "POST",
   }).then(response => {
     return response.json();
   });

@@ -122,7 +122,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
   function handleDeleteItem(chartID, itemID) {
     deleteClientItem(chartID, itemID);
-    deleteItem(itemID);
+    deleteItem(itemID, chartID);
   }
 
   function openItemInfo(chartID, itemID) {
@@ -137,7 +137,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     const newDescription = descriptionAreaRef.current.value;
     setCurrentItemInfo({ ...currentItemInfo, description: newDescription });
     setClientItemDescription(currentItemInfo.chartID, currentItemInfo.itemID, newDescription);
-    console.log(await setItemDescription(currentItemInfo.id, newDescription));
+    console.log(await setItemDescription({ newDescription, chartID: currentItemInfo.chartID, itemID: currentItemInfo.itemID }));
   }
 
   function cancelDescription() {

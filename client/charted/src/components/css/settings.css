@@ -4,7 +4,7 @@
   width: 50rem;
   border-radius: 0.5rem;
   margin-top: 2rem;
-  /* transition: all 100ms; */
+  transition: all 100ms;
   animation: shrink 300ms forwards;
   animation-play-state: running;
 }

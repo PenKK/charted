@@ -44,13 +44,9 @@ router.post("/delete", authenticateToken, async (req, res) => {
 
   const chart = await Chart.findOne({ where: { chartID } });
 
-  if (chart == null) {
-    return res.status(404).send("Could not delete the chart as it was not found");
-  }
+  if (chart == null) return res.status(404).send("Could not delete the chart as it was not found");
 
-  if (chart.userID != req.user.userID) {
-    return res.status(401).send("You are not authorized to delete this chart");
-  }
+  if (chart.userID != req.user.userID) return res.status(401).send("You are not authorized to delete this chart");
 
   chart.destroy();
 
@@ -80,6 +76,30 @@ router.post("/createItem", authenticateToken, async (req, res) => {
   return res.status(201).json({ itemID: newItemID, message: "Successfully created item" });
 });
 
+router.post("/deleteItem", authenticateToken, async (req, res) => {
+  const { itemID, chartID } = req.body;
+
+  const chart = await Chart.findOne({ where: { chartID } });
+
+  if (chart == null) {
+    return res.status(404).send("Chart not found");
+  }
+
+  if (chart.userID != req.user.userID) {
+    return res.status(401).send("You are not authorized to delete this item");
+  }
+
+  chart.items.splice(
+    chart.items.findIndex(item => item.itemID == itemID),
+    1
+  );
+
+  chart.changed("items", true);
+  chart.save();
+
+  res.send(200);
+});
+
 router.post("/moveItem", authenticateToken, async (req, res) => {
   const { toChartID, itemID, fromChartID } = req.body;
 
@@ -94,12 +114,6 @@ router.post("/moveItem", authenticateToken, async (req, res) => {
       chartID: toChartID,
     },
   });
-
-  if (fromChart.items.findIndex(item => item.itemID == itemID) == -1) {
-    console.log("stuff not found ye");
-    console.log(`From chart ${fromChart.name} to ${toChart.name}\nSearching for itemID ${itemID}`);
-    console.log(`\n${JSON.stringify(fromChart.items)}\n\n${JSON.stringify(toChart.items)}`);
-  }
 
   const targetItem = fromChart.items.splice(
     fromChart.items.findIndex(item => item.itemID == itemID),
