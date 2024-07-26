@@ -8,32 +8,46 @@ const dayjs = require("dayjs");
 router.use(express.json());
 
 function authenticateToken(req, res, next) {
-  const token = req.headers["cookie"]
-    .split(`; `)
-    .find(row => row.startsWith("api-auth="))
-    .split("=")[1];
+  try {
+    const token = req.headers["cookie"]
+      .split(`; `)
+      .find(row => row.startsWith("api-auth="))
+      .split("=")[1];
 
-  if (token == null) return res.sendStatus(401);
+    if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      res.cookie("api-auth", "", {
-        secure: false,
-        httpOnly: true,
-        expires: dayjs().toDate(),
-      });
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        res.cookie("api-auth", "", {
+          secure: false,
+          httpOnly: true,
+          expires: dayjs().toDate(),
+        });
 
-      res.cookie("username", "", {
-        secure: false,
-        expires: dayjs().toDate(),
-      });
+        res.cookie("username", "", {
+          secure: false,
+          expires: dayjs().toDate(),
+        });
 
-      return res.sendStatus(401).send("Invalid api-auth key");
-    }
+        return res.sendStatus(401).send("Invalid api-auth key");
+      }
 
-    req.user = user;
-    next();
-  });
+      req.user = user;
+      next();
+    });
+  } catch (error) {
+    res.cookie("api-auth", "", {
+      secure: false,
+      httpOnly: true,
+      expires: dayjs().toDate(),
+    });
+
+    res.cookie("username", "", {
+      secure: false,
+      expires: dayjs().toDate(),
+    });
+    return res.status(401).send("Error reading api-auth key");
+  }
 }
 
 router.post("/register", async (req, res) => {

@@ -218,6 +218,6 @@
 }
 
 .scroll-icon-down {
-  transform: translateY(145%) scaleX(2);
+  transform: translateY(120%) scaleX(2);
   rotate: 180deg;
 }

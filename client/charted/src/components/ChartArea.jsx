@@ -157,8 +157,10 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     const [scrollIconDown, setScrollIconDown] = useState(false);
     const checkOverFlowRef = useRef(null);
 
+    console.log(props.chartID + " RENDERED ");
+
     useEffect(() => {
-      if (isOverflown(checkOverFlowRef)) {
+      if (isOverflown(checkOverFlowRef.current)) {
         setScrollIconDown(true);
       }
     }, []);
@@ -166,10 +168,10 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     function checkOverflow(e) {
       const scrollPercent = e.target.scrollTop / (e.target.scrollHeight - e.target.clientHeight);
 
-      if (scrollPercent == 0) {
+      if (scrollPercent <= 0.05) {
         setScrollIconUp(false);
         setScrollIconDown(true);
-      } else if (scrollPercent == 1) {
+      } else if (scrollPercent >= 0.95) {
         setScrollIconUp(true);
         setScrollIconDown(false);
       } else {
