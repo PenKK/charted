@@ -157,8 +157,6 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     const [scrollIconDown, setScrollIconDown] = useState(false);
     const checkOverFlowRef = useRef(null);
 
-    console.log(props.chartID + " RENDERED ");
-
     useEffect(() => {
       if (isOverflown(checkOverFlowRef.current)) {
         setScrollIconDown(true);

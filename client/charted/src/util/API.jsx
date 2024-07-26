@@ -69,7 +69,6 @@ export async function getWorkspaceCharts(workspaceID) {
 
 export async function createItem(data) {
   return api.post(`/chart/createItem`, data).then(response => {
-    console.log(response);
     return response.data;
   });
 }
