@@ -5,6 +5,7 @@ export async function loginUser(formData) {
   try {
     const loginRequest = await login(formData);
     setCookie("username", loginRequest.data.username);
+    setCookie("email", loginRequest.data.email);
   } catch (err) {
     console.log(err);
     return err.data;

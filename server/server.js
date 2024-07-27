@@ -8,6 +8,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const workspaceRoutes = require("./routes/workspace");
 const chartRoutes = require("./routes/chart");
+const userRoutes = require("./routes/user");
 
 app.use(
   cors({
@@ -20,6 +21,7 @@ app.use(
 app.use("/auth", authRoutes);
 app.use("/workspace", workspaceRoutes);
 app.use("/chart", chartRoutes);
+app.use("/user", userRoutes);
 
 const PORT = 3000;
 

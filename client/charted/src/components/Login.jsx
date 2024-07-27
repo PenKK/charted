@@ -18,14 +18,14 @@ export default function Login() {
     const accountData = Object.fromEntries(formData);
 
     const loginErrorMessage = await loginUser(accountData);
-    
+
     if (loginErrorMessage != "") {
       setErrorMessage(loginErrorMessage);
+      setDisableSubmit(false);
       return;
     }
 
-    location.href = '/u';
-
+    location.href = "/u";
     setDisableSubmit(false);
   }
 

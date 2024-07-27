@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./css/settings.css";
 import { getCookie, setCookie } from "../util/CookieManager";
-import { changeAccountEmail, changeAccountPassword, changeAccountUsername, login } from "../util/API";
+import { changeEmail, changePassword, changeUsername, login } from "../util/API";
 import spinner from "../assets/spinner.svg";
 import check from "../assets/check.svg";
 import x from "../assets/x.svg";
@@ -25,51 +25,43 @@ export default function Settings({ setNavBarUsername }) {
   const [passwordError, setPasswordError] = useState("");
 
   const newPasswordRef = useRef(null);
+  const shrinkGrowRef = useRef(null);
 
   async function handleSaveInfo(e) {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    console.log(...formData);
-    formData.append("userID", getCookie("userID"));
+    const formJSON = Object.fromEntries(new FormData(e.target));
+    console.log(formJSON);
 
-    const usernameFormData = new FormData();
-    const emailFormData = new FormData();
-
-    usernameFormData.append("username", formData.get("username"));
-    emailFormData.append("email", formData.get("email"));
-
-    usernameFormData.append("userID", getCookie("userID"));
-    emailFormData.append("userID", getCookie("userID"));
-
-    if (usernameFormData.get("username") != currentName) {
+    if (formJSON.username != currentName) {
       handleUsername();
     }
-    if (emailFormData.get("email") != currentEmail) {
+    if (formJSON.email != currentEmail) {
       handleEmail();
     }
 
     async function handleUsername() {
       setUsernameError("");
       setNameProcessingState(100);
-      const result = await changeAccountUsername(usernameFormData);
+
+      const result = await changeUsername(formJSON);
+      setNameProcessingState(result.status);
 
       switch (result.status) {
-        case "success":
-          setNameProcessingState(200);
-          setCurrentName(usernameFormData.get("username"));
-          setCookie("username", usernameFormData.get("username"));
-          setNavBarUsername(usernameFormData.get("username"));
+        case 200:
+          setCurrentName(result.data.newUsername);
+          setCookie("username", result.data.newUsername);
+          setNavBarUsername(result.data.newUsername);
           break;
-        case "failure":
-          setNameProcessingState(400);
-          setUsernameError("This username is already in use");
+        case 409:
+          setUsernameError("Username already in use, please choose a different one");
           break;
-        case "offline":
-          setNameProcessingState(404);
+        case 401:
+          setUsernameError("Unauthorized, please login and try again");
+          break;
+        case 404:
           setUsernameError("Unable to reach server, please try again later");
           break;
         default:
-          setNameProcessingState(500);
           setUsernameError("An unexpected error occured");
       }
     }
@@ -77,24 +69,22 @@ export default function Settings({ setNavBarUsername }) {
     async function handleEmail() {
       setEmailError("");
       setEmailProcessingState(100);
-      const result = await changeAccountEmail(emailFormData);
+
+      const result = await changeEmail(formJSON);
+      setEmailProcessingState(result.status);
 
       switch (result.status) {
-        case "success":
-          setEmailProcessingState(200);
-          setCurrentEmail(emailFormData.get("email"));
-          setCookie("email", emailFormData.get("email"));
+        case 200:
+          setCurrentEmail(result.data.newEmail);
+          setCookie("email", result.data.newEmail);
           break;
-        case "failed":
-          setEmailProcessingState(400);
+        case 409:
           setEmailError("This email is already in use");
           break;
-        case "offline":
-          setEmailProcessingState(404);
+        case 404:
           setEmailError("Unable to reach server, please try again later");
           break;
         default:
-          setEmailProcessingState(500);
           setEmailError("An unexpected error occured");
       }
     }
@@ -110,47 +100,28 @@ export default function Settings({ setNavBarUsername }) {
   async function handleSavePassword(e) {
     e.preventDefault();
     setPasswordError("");
-    const formData = new FormData(e.target);
-    const passwordFormData = new FormData();
-
-    passwordFormData.append("password", formData.get("password"));
-    passwordFormData.append("userID", getCookie("userID"));
-
-    setEditingPassword(false);
+    const formData = Object.fromEntries(new FormData(e.target));
     setPasswordProcessingState(100);
-    const result = await validateLogin(getCookie("email"), formData.get("previousPassword"));
-    
+
+    const result = await changePassword(formData);
+    setPasswordProcessingState(result.status);
+    setEditingPassword(false);
+
     switch (result.status) {
-      case "true":
-        const passwordSubmitionResult = await changeAccountPassword(passwordFormData);
-        displayPassSubResult(passwordSubmitionResult);
+      case 200:
+        break;
+      case 404:
+        setPasswordError("Previous password is incorrect");
         break;
       case 500:
-        setPasswordError("Incorrect current password");
-        setPasswordProcessingState(400);
+        setPasswordError("An unexpected error occured");
         break;
       default:
-        if (result.message == "Failed to fetch") {
-          setPasswordError("Unable to reach server, please try again later");
-          setPasswordProcessingState(404);
-        }
+        setPasswordError("Unable to reach server, please try again later");
+        setPasswordProcessingState(404);
     }
 
-    function displayPassSubResult(result) {
-      switch (result.status) {
-        case "success":
-          setPasswordProcessingState(200);
-          break;
-        case "failure":
-          setPasswordProcessingState(400);
-          setPasswordError("An error occured while changing password");
-          break;
-        default:
-          setPasswordError("An unexpected error occured");
-          setPasswordProcessingState(500);
-          break;
-      }
-    }
+    newPasswordRef.current.value = "";
   }
 
   function getStatusIcon(status) {
@@ -166,6 +137,17 @@ export default function Settings({ setNavBarUsername }) {
     }
   }
 
+  const firstUpdate = useRef(true);
+
+  useLayoutEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    // WORKS WITH STRICT MODE OFF
+    shrinkGrowRef.current.style.animation = editingPassword ? "grow 300ms forwards" : "shrink 300ms forwards";
+  });
+
   function Line() {
     return (
       <div className="d-flex justify-content-center mb-4">
@@ -178,7 +160,7 @@ export default function Settings({ setNavBarUsername }) {
 
   return (
     <div className="d-flex justify-content-center">
-      <div className={`d-flex flex-column settings-container ${editingPassword && "animate-settings-container"}`}>
+      <div ref={shrinkGrowRef} className={`d-flex flex-column settings-container`}>
         <h2 className="settings-header">SETTINGS</h2>
         <Line />
         <form onSubmit={handleSaveInfo}>

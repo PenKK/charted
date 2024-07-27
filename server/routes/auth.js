@@ -7,6 +7,24 @@ const dayjs = require("dayjs");
 
 router.use(express.json());
 
+function clearCookies(response) {
+  response.cookie("api-auth", "", {
+    secure: false,
+    httpOnly: true,
+    expires: dayjs().toDate(),
+  });
+
+  response.cookie("username", "", {
+    secure: false,
+    expires: dayjs().toDate(),
+  });
+
+  response.cookie("email", "", {
+    secure: false,
+    expires: dayjs().toDate(),
+  });
+}
+
 function authenticateToken(req, res, next) {
   try {
     const token = req.headers["cookie"]
@@ -18,17 +36,7 @@ function authenticateToken(req, res, next) {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
       if (err) {
-        res.cookie("api-auth", "", {
-          secure: false,
-          httpOnly: true,
-          expires: dayjs().toDate(),
-        });
-
-        res.cookie("username", "", {
-          secure: false,
-          expires: dayjs().toDate(),
-        });
-
+        clearCookies(res);
         return res.sendStatus(401).send("Invalid api-auth key");
       }
 
@@ -36,16 +44,7 @@ function authenticateToken(req, res, next) {
       next();
     });
   } catch (error) {
-    res.cookie("api-auth", "", {
-      secure: false,
-      httpOnly: true,
-      expires: dayjs().toDate(),
-    });
-
-    res.cookie("username", "", {
-      secure: false,
-      expires: dayjs().toDate(),
-    });
+    clearCookies(res);
     return res.status(401).send("Error reading api-auth key");
   }
 }
@@ -109,7 +108,7 @@ router.post("/login", async (req, res) => {
     expires: dayjs().add(7, "days").toDate(),
   });
 
-  res.status(201).json({ message: `Login successful`, username: user.username });
+  res.status(201).json({ message: `Login successful`, username: user.username, email: user.email });
 });
 
 module.exports = router;

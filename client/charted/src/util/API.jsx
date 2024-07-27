@@ -92,36 +92,37 @@ export async function deleteItem(itemID, chartID) {
   });
 }
 
-export async function validateToken(userID, token, expiryDate) {
-  return fetch(`http://142.93.148.156:80/u/signin/auth/check/token?userID=${userID}&accessToken=${token}&expiryDateString=${expiryDate}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
+export async function changeUsername(data) {
+  return api
+    .post(`/user/changeUsername`, data)
+    .then(response => {
+      return response;
+    })
+    .catch(err => {
+      return err.response;
+    });
 }
 
-export async function validateCurrentToken() {
-  return fetch(`http://142.93.148.156:80/u/signin/auth/check/token?userID=${getCookie("userID")}&accessToken=${getCookie("token")}&expiryDateString=${getCookie("tokenExpiry")}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
+export async function changeEmail(data) {
+  return api
+    .post(`/user/changeEmail`, data)
+    .then(response => {
+      return response;
+    })
+    .catch(err => {
+      return err.response;
+    });
 }
 
-export async function nullifyToken(userID) {
-  return fetch(`http://142.93.148.156:80/u/signin/nullify/token?userID=${userID}`, {
-    method: "POST",
-  }).then(response => {
-    return response.json();
-  });
-}
-
-export async function getAllUserWorkspaces(userID) {
-  return fetch(`http://142.93.148.156:80/u/get/workspaces/all/userid?userID=${userID}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
+export async function changePassword(data) {
+  return api
+    .post(`/user/changePassword`, data)
+    .then(response => {
+      return response;
+    })
+    .catch(err => {
+      return err.response;
+    });
 }
 
 // export async function getWorkspaceIDS(userID) {
@@ -148,30 +149,6 @@ export async function getAllUserWorkspaces(userID) {
 //   });
 // }
 
-export async function authenticateWorkspace(userID, workspaceID) {
-  try {
-    return await fetch(`http://142.93.148.156:80/u/w/auth/${userID}/${workspaceID}`, {
-      method: "GET",
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        return data.status == "success" ? 1 : -1;
-      });
-  } catch (error) {
-    return 0; // Server offline
-  }
-}
-
-export async function getWorkspaceName(workspaceID) {
-  return fetch(`http://142.93.148.156:80/u/get/workspaces/name/workspaceid?workspaceID=${workspaceID}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
-}
-
 // export async function getWorkspaceCharts(workspaceID) {
 //   return fetch(`http://142.93.148.156:80/u/get/charts/workspaceid?workspaceID=${workspaceID}`, {
 //     method: "GET",
@@ -179,54 +156,3 @@ export async function getWorkspaceName(workspaceID) {
 //     return response.json();
 //   });
 // }
-
-export async function getChartsDisplay(workspaceID) {
-  return fetch(`http://142.93.148.156:80/u/get/charts/display/workspaceid?workspaceID=${workspaceID}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
-}
-
-export async function setItemName(itemID, newName) {
-  return fetch(`http://142.93.148.156:80/u/set/item/name/itemID?itemID=${itemID}&name=${newName}`, {
-    method: "GET",
-  }).then(response => {
-    return response.json();
-  });
-}
-
-export async function changeAccountUsername(data) {
-  return fetch(`http://142.93.148.156:80/u/set/user/name/userid`, {
-    method: "POST",
-    body: data,
-  })
-    .then(response => {
-      return response.json();
-    })
-    .catch(error => {
-      return { status: "offline" };
-    });
-}
-
-export async function changeAccountEmail(data) {
-  return fetch(`http://142.93.148.156:80/u/set/user/email/userid`, {
-    method: "POST",
-    body: data,
-  })
-    .then(response => {
-      return response.json();
-    })
-    .catch(error => {
-      return { status: "offline" };
-    });
-}
-
-export async function changeAccountPassword(data) {
-  return fetch(`http://142.93.148.156:80/u/set/user/password/userid`, {
-    method: "POST",
-    body: data,
-  }).then(response => {
-    return response.json();
-  });
-}

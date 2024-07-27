@@ -5,8 +5,7 @@
   border-radius: 0.5rem;
   margin-top: 2rem;
   transition: all 100ms;
-  animation: shrink 300ms forwards;
-  animation-play-state: running;
+  animation-play-state: paused ;
 }
 
 .line {
@@ -75,11 +74,6 @@
   opacity: 0;
   position: absolute;
   pointer-events: none;
-}
-
-.animate-settings-container {
-  animation: grow 300ms forwards;
-  animation-play-state: running;
 }
 
 @keyframes grow {
