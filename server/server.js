@@ -12,7 +12,7 @@ const userRoutes = require("./routes/user");
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://chartedwebsite.netlify.app/",
     credentials: true,
     optionSuccessStatus: 200,
   })
