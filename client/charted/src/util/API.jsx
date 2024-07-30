@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000", // Update with your backend URL
-  withCredentials: true, // This is essential for sending cookies
+  baseURL: "http://elvisclashroyale.mooo.com:3000",
+  withCredentials: true, // Cookies
 });
 
 export async function registerAccount(data) {
