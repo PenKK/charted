@@ -1,5 +1,5 @@
 import Navbar from "./components/Navbar";
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter, HashRouter } from "react-router-dom";
 import Login from "./components/Login";
 import Home from "./components/Home";
 import Register from "./components/Register";
@@ -18,7 +18,7 @@ export default function App() {
     <>
       <Navbar username={navbarUsername} />
       <div className="container-bg">
-        <BrowserRouter>
+        <HashRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
@@ -27,7 +27,7 @@ export default function App() {
             <Route path="/u/settings" element={<Settings setNavBarUsername={setNavbarUsername} />} />
             <Route path="/u/workspace/:id" element={<Workspace />} />
           </Routes>
-        </BrowserRouter>
+        </HashRouter>
       </div>
     </>
   );
