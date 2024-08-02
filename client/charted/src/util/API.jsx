@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://elvisclashroyale.mooo.com:3000",
+  baseURL: "http://elvisclashroyale.mooo.com:3000",
   withCredentials: true, // Cookies
 });
 
