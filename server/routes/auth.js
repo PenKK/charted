@@ -3,9 +3,11 @@ const router = express.Router();
 const { User, Sequelize } = require("../models");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
 const dayjs = require("dayjs");
 
 router.use(express.json());
+router.use(cookieParser());
 
 function clearCookies(response) {
   response.cookie("api-auth", "", {
@@ -99,13 +101,14 @@ router.post("/login", async (req, res) => {
   if (!passwordValid) {
     return res.status(404).send("Invalid email or password");
   }
-  console.log(user.id);
+
   const jwtToken = jwt.sign({ userID: user.userID }, process.env.ACCESS_TOKEN_SECRET);
 
   res.cookie("api-auth", jwtToken, {
     secure: false,
     httpOnly: true,
     expires: dayjs().add(7, "days").toDate(),
+    sameSite: "none",
   });
 
   res.status(201).json({ message: `Login successful`, username: user.username, email: user.email });
