@@ -8,7 +8,7 @@ export async function loginUser(formData) {
     setCookie("email", loginRequest.data.email);
   } catch (err) {
     console.log(err);
-    return err.data;
+    return err;
   }
 
   return "";
