@@ -18,10 +18,12 @@ export default function Login() {
     const accountData = Object.fromEntries(formData);
 
     const loginErrorMessage = await loginUser(accountData);
+
     if (loginErrorMessage == null) {
       setErrorMessage("Unable to reach server");
       setDisableSubmit(false);
       return;
+      
     } else if (loginErrorMessage.data != "") {
       setErrorMessage(loginErrorMessage.data);
       setDisableSubmit(false);
