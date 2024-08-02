@@ -2,9 +2,11 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
-const db = require("./models");
-const cors = require("cors");
 
+const cors = require("cors");
+const https = require("https");
+
+const db = require("./models");
 const authRoutes = require("./routes/auth");
 const workspaceRoutes = require("./routes/workspace");
 const chartRoutes = require("./routes/chart");
@@ -25,8 +27,13 @@ app.use("/user", userRoutes);
 
 const PORT = 3000;
 
+const sslOptions = {
+  key: fs.readFileSync("/etc/letsencrypt/live/charted.mooo.com/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/charted.mooo.com/fullchain.pem"),
+};
+
 db.sequelize.sync().then(() => {
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running at http://0.0.0.0:${PORT}/`);
+  https.createServer(sslOptions, app).listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running at https://0.0.0.0:${PORT}/`);
   });
 });
