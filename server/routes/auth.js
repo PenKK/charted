@@ -11,18 +11,18 @@ router.use(cookieParser());
 
 function clearCookies(response) {
   response.cookie("api-auth", "", {
-    secure: false,
+    secure: true,
     httpOnly: true,
     expires: dayjs().toDate(),
   });
 
   response.cookie("username", "", {
-    secure: false,
+    secure: true,
     expires: dayjs().toDate(),
   });
 
   response.cookie("email", "", {
-    secure: false,
+    secure: true,
     expires: dayjs().toDate(),
   });
 }
@@ -105,7 +105,7 @@ router.post("/login", async (req, res) => {
   const jwtToken = jwt.sign({ userID: user.userID }, process.env.ACCESS_TOKEN_SECRET);
 
   res.cookie("api-auth", jwtToken, {
-    secure: false,
+    secure: true,
     httpOnly: true,
     expires: dayjs().add(7, "days").toDate(),
     sameSite: "none",
