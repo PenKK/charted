@@ -15,6 +15,8 @@ const userRoutes = require("./routes/user");
 
 const developmentMode = process.env.NODE_ENV === "development";
 
+console.log(process.env.NODE_ENV);
+
 app.use(
   cors({
     origin: developmentMode ? "http://localhost:5173" : "https://charted.mooo.com",

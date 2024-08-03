@@ -1,5 +1,3 @@
-echo "Script executed from: ${PWD}"
-
 echo "Switching to branch master"
 git checkout main
 
@@ -25,5 +23,3 @@ ssh deploy@10.0.0.137 pm2 start /home/penk/Desktop/ChartedAPI/server.js --name c
 rm -rf charted
 
 echo "Done"
-
-read -p "Press enter to continue"
