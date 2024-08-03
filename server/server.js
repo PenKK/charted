@@ -15,8 +15,6 @@ const userRoutes = require("./routes/user");
 
 const developmentMode = process.env.NODE_ENV === "development";
 
-console.log(process.env.NODE_ENV);
-
 app.use(
   cors({
     origin: developmentMode ? "http://localhost:5173" : "https://charted.mooo.com",
@@ -40,7 +38,7 @@ const sslOptions = {
 if (developmentMode) {
   db.sequelize.sync().then(() => {
     app.listen(3001, "0.0.0.0", () => {
-      console.log(`Server running in production mode on port ${PORT}/`);
+      console.log(`Server running in production mode on port ${PORT}`);
     });
   });
   return;
@@ -48,6 +46,6 @@ if (developmentMode) {
 
 db.sequelize.sync().then(() => {
   https.createServer(sslOptions, app).listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT}/`);
+    console.log(`Server running on port ${PORT} ${process.env.NODE_ENV}`);
   });
 });
