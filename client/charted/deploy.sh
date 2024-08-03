@@ -1,6 +1,8 @@
 echo "Switching to branch master"
 git checkout main
 
+export NODE_ENV=production
+
 echo "Building app..."
 npm run build
 

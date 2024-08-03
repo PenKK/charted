@@ -13,9 +13,11 @@ const workspaceRoutes = require("./routes/workspace");
 const chartRoutes = require("./routes/chart");
 const userRoutes = require("./routes/user");
 
+const developmentMode = process.env.NODE_ENV === "development";
+
 app.use(
   cors({
-    origin: "https://charted.mooo.com",
+    origin: developmentMode ? "http://localhost:5173" : "https://charted.mooo.com",
     credentials: true,
     optionSuccessStatus: 200,
   })
@@ -33,8 +35,17 @@ const sslOptions = {
   cert: fs.readFileSync("/etc/letsencrypt/live/charted.mooo.com/fullchain.pem"),
 };
 
+if (developmentMode) {
+  db.sequelize.sync().then(() => {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running in production mode in  http://0.0.0.0:${PORT}/`);
+    });
+  });
+  return;
+}
+
 db.sequelize.sync().then(() => {
   https.createServer(sslOptions, app).listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running at https://0.0.0.0:${PORT}/`);
+    console.log(`Server running on port ${PORT}/ in p mode`);
   });
 });
