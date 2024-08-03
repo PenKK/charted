@@ -37,8 +37,8 @@ const sslOptions = {
 
 if (developmentMode) {
   db.sequelize.sync().then(() => {
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server running in production mode in  http://0.0.0.0:${PORT}/`);
+    app.listen(3001, "0.0.0.0", () => {
+      console.log(`Server running in production mode on port ${PORT}/`);
     });
   });
   return;
@@ -46,6 +46,6 @@ if (developmentMode) {
 
 db.sequelize.sync().then(() => {
   https.createServer(sslOptions, app).listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT}/ in p mode`);
+    console.log(`Server running on port ${PORT}/`);
   });
 });
