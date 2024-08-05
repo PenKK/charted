@@ -13,7 +13,7 @@ export default function Navbar({ username }) {
     <nav className="navbar navbar-expand">
       <div className="container">
         <a href="/" className="navbar-brand">
-          Charter
+          Charted
         </a>
         <ul className="navbar-nav">
           <NavItem href={loggedIn ? "/u" : "/"} text="Home" />

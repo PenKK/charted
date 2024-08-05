@@ -110,7 +110,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
                   <h4>Cancel</h4>
                 </button>
               </div>
-              <button className="btn description-btn" onClick={() => handleDeleteItem(currentItemInfo.chartID, currentItemInfo.id)}>
+              <button className="btn description-btn" onClick={() => handleDeleteItem(currentItemInfo.chartID, currentItemInfo.itemID)}>
                 <h4>Delete item</h4>
               </button>
             </div>
@@ -256,14 +256,22 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     createClientItem(onDropChartID, itemObject); // Create duplicate item (client), atp the new item will have old id
     deleteClientItem(fromChartID, itemObject.itemID); // Delete from old chart (client)
 
-    const moveDBItem = await moveItem({ toChartID: onDropChartID, itemID: itemObject.itemID, fromChartID });
+    moveItem({ toChartID: onDropChartID, itemID: itemObject.itemID, fromChartID });
   }
 
   /* CLIENT DISPLAY UTIL */
 
+  function getChartByID(charts, chartID) {
+    return charts.find(chart => chart.chartID == chartID);
+  }
+
+  function getItemByID(charts, chartID, itemID) {
+    return getChartByID(charts, chartID).items.find(item => item.itemID == itemID);
+  }
+
   function setClientItemDescription(chartID, itemID, newDescription) {
     let modifiedCharts = [...charts];
-    modifiedCharts.find(chart => chart.chartID === chartID).items.find(item => item.itemID === itemID).description = newDescription;
+    getItemByID(modifiedCharts, chartID, itemID).description = newDescription;
     setCharts([...modifiedCharts]);
   }
 
@@ -284,26 +292,25 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
 
   function createClientItem(chartID, itemObject) {
     let modifiedCharts = [...charts];
-    modifiedCharts.find(chart => chart.chartID == chartID).items.push(itemObject);
+    getChartByID(modifiedCharts, chartID).items.push(itemObject);
     setCharts([...modifiedCharts]);
   }
 
   function updateClientItemID(chartID, itemID, newID) {
     let modifiedCharts = [...charts];
-
-    modifiedCharts.find(chart => chart.chartID == chartID).items.find(item => item.itemID == itemID).itemID = newID;
+    getItemByID(modifiedCharts, chartID, itemID).itemID = newID;
     setCharts([...modifiedCharts]);
   }
 
   function updateClientChartID(chartID, newID) {
     let modifiedCharts = [...charts];
-    modifiedCharts.find(chart => chart.chartID === chartID).chartID = newID;
+    getChartByID(modifiedCharts, chartID).chartID = newID;
     setCharts([...modifiedCharts]);
   }
 
   function deleteClientItem(chartID, itemID) {
     let modifiedCharts = [...charts];
-    let targetItems = modifiedCharts.find(chart => chart.chartID == chartID).items;
+    let targetItems = getChartByID(modifiedCharts, chartID).items;
 
     targetItems.splice(
       targetItems.findIndex(item => item.itemID == itemID),
