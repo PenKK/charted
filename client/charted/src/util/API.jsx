@@ -19,14 +19,23 @@ export async function registerAccount(data) {
 
 export async function login(data) {
   return api
-    .post("/auth/login", data, {
-      withCredentials: true,
-    })
+    .post("/auth/login", data)
     .then(data => {
       return data;
     })
     .catch(err => {
       return Promise.reject(err.response);
+    });
+}
+
+export async function logout() {
+  return api
+    .post("/auth/logout")
+    .then(response => {
+      return response;
+    })
+    .catch(err => {
+      return err;
     });
 }
 

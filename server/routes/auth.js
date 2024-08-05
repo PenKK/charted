@@ -79,12 +79,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.get("/getPass", authenticateToken, (req, res) => {
-  User.findAll().then(users => {
-    res.send(users);
-  });
-});
-
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -112,6 +106,16 @@ router.post("/login", async (req, res) => {
   });
 
   res.status(200).json({ message: `Login successful`, username: user.username, email: user.email });
+});
+
+router.post("/logout", (req, res) => {
+  res.cookie("api-auth", "", {
+    secure: true,
+    httpOnly: true,
+    expires: dayjs().toDate(),
+  });
+
+  res.sendStatus(200);
 });
 
 module.exports = router;

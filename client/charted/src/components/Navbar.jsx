@@ -1,9 +1,10 @@
 import "./css/Navbar.css";
 import { useState } from "react";
 import gear from "../assets/gear.svg";
-import logout from "../assets/logout.svg";
+import logoutIcon from "../assets/logout.svg";
 import downarrow from "../assets/dropdown.svg";
 import { deleteCookie, getCookie } from "../util/CookieManager";
+import { logout } from "../util/API";
 
 export default function Navbar({ username }) {
   const loggedIn = username == null || username == "" ? false : true;
@@ -59,10 +60,10 @@ function DropdownMenu() {
       <DropdownButton label="Settings" leftIcon={gear} func={() => (location.href = "/u/settings")} />
       <DropdownButton
         label="Log out"
-        leftIcon={logout}
+        leftIcon={logoutIcon}
         func={async () => {
+          await logout();
           deleteCookie("username");
-          deleteCookie("api-auth");
           deleteCookie("email");
           location.href = "/";
         }}
