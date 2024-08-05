@@ -8,7 +8,7 @@ echo "Stopping server..."
 ssh deploy@10.0.0.137 pm2 stop chartedAPI && pm2 delete chartedAPI
 
 echo "Deploying files to server..."
-ssh deploy@10.0.0.137 rm -rf /home/penk/Desktop/ChartedAPI
+ssh deploy@10.0.0.137 'find /home/penk/Desktop/ChartedAPI -mindepth 1 ! \( -name ".env" -o -name "ecosystem.config.js" \) -delete'
 scp -r charted/server/* deploy@10.0.0.137:/home/penk/Desktop/ChartedAPI
 
 echo "Installing dependicies..."

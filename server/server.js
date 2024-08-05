@@ -28,6 +28,16 @@ app.use("/workspace", workspaceRoutes);
 app.use("/chart", chartRoutes);
 app.use("/user", userRoutes);
 
+if (developmentMode) {
+  console.log("DEVELOPMENT MODE");
+  db.sequelize.sync().then(() => {
+    app.listen(3001, "0.0.0.0", () => {
+      console.log(`Server running on port 3001`);
+    });
+  });
+  return;
+}
+
 const PORT = 3000;
 
 const sslOptions = {
@@ -35,17 +45,8 @@ const sslOptions = {
   cert: fs.readFileSync("/etc/letsencrypt/live/charted.mooo.com/fullchain.pem"),
 };
 
-if (developmentMode) {
-  db.sequelize.sync().then(() => {
-    app.listen(3001, "0.0.0.0", () => {
-      console.log(`Server running in production mode on port ${PORT}`);
-    });
-  });
-  return;
-}
-
 db.sequelize.sync().then(() => {
   https.createServer(sslOptions, app).listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT} ${process.env.NODE_ENV}`);
+    console.log(`Server running on port ${PORT}`);
   });
 });
