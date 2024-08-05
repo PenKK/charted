@@ -111,7 +111,7 @@ router.post("/login", async (req, res) => {
     sameSite: "none",
   });
 
-  res.status(201).json({ message: `Login successful`, username: user.username, email: user.email });
+  res.status(200).json({ message: `Login successful`, username: user.username, email: user.email });
 });
 
 module.exports = router;

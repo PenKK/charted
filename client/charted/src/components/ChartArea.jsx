@@ -128,7 +128,6 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
   function openItemInfo(chartID, itemID) {
     const chart = charts.find(chart => chart.chartID == chartID);
     const item = chart.items.find(item => item.itemID == itemID);
-    console.log(item);
     setCurrentItemInfo({ ...item, chartID, chartName: chart.name });
     setItemInfoOpen(true);
   }
@@ -137,7 +136,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
     const newDescription = descriptionAreaRef.current.value;
     setCurrentItemInfo({ ...currentItemInfo, description: newDescription });
     setClientItemDescription(currentItemInfo.chartID, currentItemInfo.itemID, newDescription);
-    console.log(await setItemDescription({ newDescription, chartID: currentItemInfo.chartID, itemID: currentItemInfo.itemID }));
+    await setItemDescription({ newDescription, chartID: currentItemInfo.chartID, itemID: currentItemInfo.itemID });
   }
 
   function cancelDescription() {

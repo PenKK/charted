@@ -6,12 +6,11 @@ export async function loginUser(formData) {
     const loginRequest = await login(formData);
     setCookie("username", loginRequest.data.username);
     setCookie("email", loginRequest.data.email);
+    return loginRequest;
   } catch (err) {
     console.log(err);
     return err;
   }
-
-  return "";
 }
 
 export async function loginAfterRegister(email, password) {

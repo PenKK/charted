@@ -23,7 +23,6 @@ export async function login(data) {
       withCredentials: true,
     })
     .then(data => {
-      console.log(data);
       return data;
     })
     .catch(err => {
@@ -75,7 +74,6 @@ export async function createItem(data) {
 
 export async function moveItem(data) {
   return api.post(`/chart/moveItem`, data).then(response => {
-    console.log(response);
     return response.data;
   });
 }

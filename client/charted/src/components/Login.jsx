@@ -10,27 +10,22 @@ export default function Login() {
   const [disableSubmit, setDisableSubmit] = useState(false);
 
   async function submitLogin(e) {
-    setDisableSubmit(true);
     e.preventDefault();
+    setDisableSubmit(true);
     setErrorMessage("");
 
     const formData = new FormData(e.target);
     const accountData = Object.fromEntries(formData);
-
     const loginErrorMessage = await loginUser(accountData);
 
     if (loginErrorMessage == null) {
-      setErrorMessage("Unable to reach server");
-      setDisableSubmit(false);
-      return;
-      
-    } else if (loginErrorMessage.data != "") {
+      setErrorMessage("Unable to reach the server");
+    } else if (loginErrorMessage.status === 404) {
       setErrorMessage(loginErrorMessage.data);
-      setDisableSubmit(false);
-      return;
+    } else if (loginErrorMessage.status === 200) {
+      location.href = "/u";
     }
 
-    location.href = "/u";
     setDisableSubmit(false);
   }
 

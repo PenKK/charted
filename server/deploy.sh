@@ -22,5 +22,3 @@ ssh deploy@10.0.0.137 NODE_ENV=production pm2 start /home/penk/Desktop/ChartedAP
 rm -rf charted
 
 echo "Done"
-
-read -p "asdas"

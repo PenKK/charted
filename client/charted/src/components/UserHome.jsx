@@ -38,7 +38,6 @@ export default function UserHome() {
   async function updateWorkspaces() {
     try {
       const workspacesString = await getWorkspacesDisplay();
-      console.log(workspacesString);
       setWorkspaces(workspacesString);
       setFirstWorkspace({ name: "New workspace", isPublic: "", enabled: "true" });
     } catch (error) {
