@@ -221,3 +221,19 @@
   transform: translateY(120%) scaleX(2);
   rotate: 180deg;
 }
+
+.trash-can-container {
+  width: 3rem;
+  height: 3rem;
+  position: absolute;
+  bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.trash-icon {
+  width: 3rem;
+  height: 3rem;
+  transition: all 125ms;
+}

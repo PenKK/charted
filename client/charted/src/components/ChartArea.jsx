@@ -4,6 +4,7 @@ import text from "../assets/text.svg";
 import card from "../assets/card.svg";
 import list from "../assets/list.svg";
 import exit from "../assets/exit.svg";
+import trash from "../assets/trash.svg";
 import "./css/chart.css";
 import { createItem, createChart, deleteItem, deleteChart, setItemDescription, moveItem } from "../util/API";
 import { useState, useEffect, useRef } from "react";
@@ -62,9 +63,45 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
         <div className="horizontal-padding-bruh"></div>
       </div>
 
+      <TrashCan />
       <ItemDetails />
     </>
   );
+
+  function TrashCan() {
+    const iconRef = useRef(null);
+
+    function handleDragOver(e) {
+      e.preventDefault();
+
+      e.target.style.width = "4rem";
+      e.target.style.height = "4rem";
+    }
+
+    function handleDragLeave(e) {
+      e.target.style.width = "3rem";
+      e.target.style.height = "3rem";
+    }
+
+    function handleOnDrop(e) {
+      e.preventDefault();
+
+      const itemObject = JSON.parse(e.dataTransfer.getData("itemObject"));
+      const fromChartID = e.dataTransfer.getData("originChartID");
+
+      e.target.style.width = "3rem";
+      e.target.style.height = "3rem";
+
+      deleteClientItem(fromChartID, itemObject.id);
+      deleteItem(itemObject.id, fromChartID);
+    }
+
+    return (
+      <div className="trash-can-container">
+        <img onDrop={e => handleOnDrop(e)} onDragOver={e => handleDragOver(e)} onDragLeave={e => handleDragLeave(e)} ref={iconRef} className="trash-icon" src={trash} alt="" />
+      </div>
+    );
+  }
 
   function ItemDetails() {
     return (
