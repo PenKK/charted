@@ -3,10 +3,7 @@ import { setCookie } from "./CookieManager";
 
 export async function loginUser(formData) {
   try {
-    const loginRequest = await login(formData);
-    setCookie("username", loginRequest.data.username);
-    setCookie("email", loginRequest.data.email);
-    return loginRequest;
+    return await login(formData);
   } catch (err) {
     console.log(err);
     return err;

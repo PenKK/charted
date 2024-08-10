@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import "./css/settings.css";
 import { getCookie, setCookie } from "../util/CookieManager";
 import { changeEmail, changePassword, changeUsername, login } from "../util/API";

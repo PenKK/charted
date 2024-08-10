@@ -1,8 +1,6 @@
 import FormInput from "./inputs/FormInput";
 import { useState } from "react";
 import "./css/LoginRegister.css";
-import { login } from "../util/API";
-import { setCookie } from "../util/CookieManager";
 import { loginUser } from "../util/LoginUtil";
 
 export default function Login() {

@@ -105,7 +105,22 @@ router.post("/login", async (req, res) => {
     sameSite: "none",
   });
 
-  res.status(200).json({ message: `Login successful`, username: user.username, email: user.email });
+  res.cookie("username", user.username, {
+    secure: true,
+    expires: dayjs().add(7, "days").toDate(),
+    sameSite: "none",
+  });
+
+  res.cookie("email", user.email, {
+    secure: true,
+    expires: dayjs().add(7, "days").toDate(),
+    sameSite: "none",
+  });
+
+  console.log(user.email);
+  
+
+  res.status(200).json({ message: `Login successful` });
 });
 
 router.post("/logout", (req, res) => {
