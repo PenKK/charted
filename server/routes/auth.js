@@ -124,12 +124,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (req, res) => {
-  res.cookie("api-auth", "", {
-    secure: true,
-    httpOnly: true,
-    expires: dayjs().toDate(),
-  });
-
+  clearCookies(res);
   res.sendStatus(200);
 });
 

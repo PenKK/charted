@@ -63,8 +63,6 @@ function DropdownMenu() {
         leftIcon={logoutIcon}
         func={async () => {
           await logout();
-          deleteCookie("username");
-          deleteCookie("email");
           location.href = "/";
         }}
       />
