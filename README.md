@@ -1,1 +1,1 @@
-[Website Link](charted.mooo.com)
+[Website Link](www.charted.mooo.com)
