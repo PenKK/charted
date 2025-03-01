@@ -6,10 +6,6 @@ const crypto = require("crypto");
 
 router.use(express.json());
 
-// Bro tryna make chart on workspace
-// We know Bro is Bro (authenticateToken), but does bro own Workspace?
-// Chek if bro id equals workspace's bro id
-
 router.post("/create", authenticateToken, async (req, res) => {
   const { name, workspaceID } = req.body;
   console.log("making chart");
