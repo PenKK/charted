@@ -1,5 +1,4 @@
 import { login } from "./API";
-import { setCookie } from "./CookieManager";
 
 export async function loginUser(formData) {
   try {

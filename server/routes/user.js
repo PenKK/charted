@@ -66,7 +66,7 @@ router.post("/changePassword", authenticateToken, async (req, res) => {
     user.save();
     return res.status(200).json({ message: `Password changed successfully for userID ${user.userID}` });
   } else {
-    return res.status(404).json({ message: "Previous password is invalid" });
+    return res.status(401).json({ message: "Previous password is invalid" });
   }
 });
 

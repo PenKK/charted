@@ -110,7 +110,7 @@ export default function Settings({ setNavBarUsername }) {
     switch (result.status) {
       case 200:
         break;
-      case 404:
+      case 401:
         setPasswordError("Previous password is incorrect");
         break;
       case 500:

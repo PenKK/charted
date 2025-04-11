@@ -18,7 +18,7 @@ export default function Login() {
 
     if (loginErrorMessage == null) {
       setErrorMessage("Unable to reach the server");
-    } else if (loginErrorMessage.status === 404) {
+    } else if (loginErrorMessage.status === 401) {
       setErrorMessage(loginErrorMessage.data);
     } else if (loginErrorMessage.status === 200) {
       location.href = "/u";

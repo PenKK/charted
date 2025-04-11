@@ -9,7 +9,6 @@ import Settings from "./components/Settings";
 import Workspace from "./components/Workspace";
 import { useState } from "react";
 import { getCookie } from "./util/CookieManager";
-import axios from "axios";
 
 export default function App() {
   const [navbarUsername, setNavbarUsername] = useState(getCookie("username"));
