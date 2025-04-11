@@ -27,6 +27,7 @@ app.use("/auth", authRoutes);
 app.use("/workspace", workspaceRoutes);
 app.use("/chart", chartRoutes);
 app.use("/user", userRoutes);
+app.get("/health", (req, res) => res.send("API running"));
 
 if (developmentMode) {
   console.log("DEVELOPMENT MODE");
