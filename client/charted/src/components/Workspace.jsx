@@ -4,7 +4,6 @@ import chart from "../assets/chart.svg";
 import question from "../assets/question.svg";
 import { useEffect, useRef, useState } from "react";
 import { getWorkspaceData, getWorkspaceCharts } from "../util/API";
-import { getCookie } from "../util/CookieManager";
 import { isOverflown } from "../util/Util";
 import ChartArea from "./ChartArea";
 
@@ -24,23 +23,9 @@ export default function Workspace() {
         const workspaceData = await getWorkspaceData(URL.id);
         setWorkspaceName(workspaceData.name);
         setSuccessfulLoad(true);
-      } catch (err) {}
-
-      // const authenticationResult = await authenticateWorkspace(URL.id);
-      // switch (authenticationResult) {
-      //   case -1:
-      //     setWorkspaceName("Invalid workspace");
-      //     break;
-      //   case 0:
-      //     setWorkspaceName("Server error");
-      //     break;
-      //   case 1:
-      //     setWorkspaceName((await getWorkspaceName(URL.id)).name);
-      //     setSuccessfulLoad(true);
-      //     break;
-      //   default:
-      //     setWorkspaceName("Client side error");
-      // }
+      } catch (err) {
+        
+      }
     }
     loadWorkspaceData();
   }, []);

@@ -3,7 +3,6 @@ import { useState } from "react";
 import gear from "../assets/gear.svg";
 import logoutIcon from "../assets/logout.svg";
 import downarrow from "../assets/dropdown.svg";
-import { deleteCookie } from "../util/CookieManager";
 import { logout } from "../util/API";
 
 export default function Navbar({ username }) {
