@@ -131,35 +131,3 @@ export async function changePassword(data) {
       return err.response;
     });
 }
-
-// export async function getWorkspaceIDS(userID) {
-//   return fetch(`http://142.93.148.156:80/u/get/workspaces/all/userid?userID=${userID}`, {
-//     method: "GET",
-//   }).then(response => {
-//     return response.json();
-//   });
-// }
-
-// export async function getWorkspaceCreationDate(workspaceID) {
-//   return fetch(`http://142.93.148.156:80/u/get/workspaces/createddate/workspaceid?workspaceID=${workspaceID}`, {
-//     method: "GET",
-//   }).then(response => {
-//     return response.json();
-//   });
-// }
-
-// export async function getWorkspaceIsPublic(workspaceID) {
-//   return fetch(`http://142.93.148.156:80/u/get/workspaces/ispublic/workspaceid?workspaceID=${workspaceID}`, {
-//     method: "GET",
-//   }).then(response => {
-//     return response.json();
-//   });
-// }
-
-// export async function getWorkspaceCharts(workspaceID) {
-//   return fetch(`http://142.93.148.156:80/u/get/charts/workspaceid?workspaceID=${workspaceID}`, {
-//     method: "GET",
-//   }).then(response => {
-//     return response.json();
-//   });
-// }
