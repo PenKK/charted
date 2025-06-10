@@ -3,7 +3,7 @@
         "username": "bob",
         "password": "password",
         "database": "test",
-        "host": "10.0.0.2",
+        "host": "192.168.1.159",
         "dialect": "mysql"
     },
     "test": {
@@ -17,7 +17,7 @@
         "username": "bob",
         "password": "password",
         "database": "chartedDB",
-        "host": "10.0.0.2",
+        "host": "192.168.1.159",
         "dialect": "mysql"
     }
 }
