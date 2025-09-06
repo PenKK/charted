@@ -6,7 +6,8 @@ Project was initially created with a friend at [Charter](https://github.com/ryan
 [Website Link](https://charted.mooo.com/)
 <img width="1627" height="353" alt="image" src="https://github.com/user-attachments/assets/3153f7d5-5c6a-45bb-a3f5-9c88175e78cd" />
 <br/><br/>
-The website utilizes JsonWebToken through middleware functions to authenticate user logins and actions for an improvement in security.
+- The website utilizes JsonWebToken through middleware functions to authenticate user logins and actions for an improvement in security. 
+- Items support drag and drop.
 ## Technologies
 
 **Front-end:**
