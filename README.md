@@ -4,11 +4,13 @@
 
 Project was initially created with a friend at [Charter](https://github.com/ryanraen/Charter) where I solely worked on front-end. After the project was dormant for a while I decided to learn and remake the back-end for the front-end I made before. The back-end API, MySQL database, and front-end page files are all self hosted on a secondary computer using nginx.<br/><br/>
 [Website Link](https://charted.mooo.com/)
+<img width="1627" height="353" alt="image" src="https://github.com/user-attachments/assets/3153f7d5-5c6a-45bb-a3f5-9c88175e78cd" />
 <br/><br/>
 The website utilizes JsonWebToken through middleware functions to authenticate user logins and actions for an improvement in security.
 ## Technologies
 
 **Front-end:**
+
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
