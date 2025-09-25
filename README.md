@@ -2,7 +2,7 @@
 
 # Another Full-Stack ToDo List App: [Charted!](https://charted.mooo.com/)
 
-Project was initially created with a friend at [Charter](https://github.com/ryanraen/Charter) where I solely worked on front-end. After the project was dormant for a while I decided to learn and remake the back-end for the front-end I made before. The back-end API, MySQL database, and front-end page files are all self hosted on a secondary computer using nginx.<br/><br/>
+Project was initially created with a friend at [Charter](https://github.com/ryanraen/Charter) where I solely worked on front-end. After leaving the project dormant for a while, I decided to learn back-end development and remake it to support the front-end I had built before. The back-end API, MySQL database, and front-end page files are all self hosted on a secondary computer using Nginx.<br/><br/>
 [Website Link](https://charted.mooo.com/)
 <img width="1627" height="353" alt="image" src="https://github.com/user-attachments/assets/3153f7d5-5c6a-45bb-a3f5-9c88175e78cd" />
 <br/><br/>
