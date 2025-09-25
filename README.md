@@ -1,15 +1,19 @@
 
+<img width="1627" height="353" alt="image" src="https://github.com/user-attachments/assets/3153f7d5-5c6a-45bb-a3f5-9c88175e78cd" />
 
 # Another Full-Stack ToDo List App: [Charted!](https://charted.mooo.com/)
 
 Project was initially created with a friend at [Charter](https://github.com/ryanraen/Charter) where I solely worked on front-end. After leaving the project dormant for a while, I decided to learn back-end development and remake it to support the front-end I had built before. The back-end API, MySQL database, and front-end page files are all self hosted on a secondary computer using Nginx.<br/><br/>
+
 [Website Link](https://charted.mooo.com/)
 
-<img width="1627" height="353" alt="image" src="https://github.com/user-attachments/assets/3153f7d5-5c6a-45bb-a3f5-9c88175e78cd" />
+<img width="849" height="384" alt="image" src="https://github.com/user-attachments/assets/918357ea-9420-4bcf-941c-b623f862672f" />
+
 <br/><br/>
+
 - The website utilizes JsonWebToken through middleware functions to authenticate user logins and actions for an improvement in security. 
 - Items support drag and drop.
-<img width="849" height="384" alt="image" src="https://github.com/user-attachments/assets/918357ea-9420-4bcf-941c-b623f862672f" />
+
 
 ## Technologies
 
