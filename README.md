@@ -14,6 +14,7 @@ Project was initially created with a friend at [Charter](https://github.com/ryan
 - The website utilizes JsonWebToken through middleware functions to authenticate user logins and actions for an improvement in security. 
 - Items support drag and drop.
 
+<img width="823" height="517" alt="image" src="https://github.com/user-attachments/assets/ece459d3-e364-41a8-8172-ff0c9067ad06" />
 
 ## Technologies
 
