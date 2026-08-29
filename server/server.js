@@ -12,6 +12,7 @@ const userRoutes = require("./routes/user");
 const developmentMode = process.env.NODE_ENV === "development";
 const PORT = developmentMode ? 3001 : 3000; // Use 3000 for production, 3001 for dev
 
+app.set('trust proxy', 1);
 app.use(
   cors({
     origin: developmentMode ? "http://localhost:5173" : "https://charted.mooo.com",
