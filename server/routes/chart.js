@@ -6,6 +6,21 @@ const crypto = require("crypto");
 
 router.use(express.json());
 
+function getItemsArray(chart) {
+  if (Array.isArray(chart.items)) return chart.items;
+  try {
+    const parsed = JSON.parse(chart.items || "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function setItemsArray(chart, itemsArray) {
+  chart.items = itemsArray;
+  chart.changed("items", true);
+}
+
 router.post("/create", authenticateToken, async (req, res) => {
   const { name, workspaceID } = req.body;
   console.log("making chart");
@@ -44,7 +59,7 @@ router.post("/delete", authenticateToken, async (req, res) => {
 
   if (chart.userID != req.user.userID) return res.status(401).send("You are not authorized to delete this chart");
 
-  chart.destroy();
+  await chart.destroy();
 
   res.status(200).send(`Chart with ID ${chartID} has been deleted`);
 });
@@ -56,18 +71,19 @@ router.post("/createItem", authenticateToken, async (req, res) => {
     where: { chartID, userID: req.user.userID },
   });
 
+  if (!chart) {
+    return res.status(404).send("Chart not found");
+  }
+
   const newItemID = crypto.randomUUID();
-
-  chart.items = [
-    ...chart.items,
-    {
-      itemID: newItemID,
-      name,
-      description: "",
-    },
-  ];
-
-  chart.save();
+  const items = getItemsArray(chart);
+  items.push({
+    itemID: newItemID,
+    name,
+    description: "",
+  });
+  setItemsArray(chart, items);
+  await chart.save();
 
   return res.status(201).json({ itemID: newItemID, message: "Successfully created item" });
 });
@@ -85,15 +101,16 @@ router.post("/deleteItem", authenticateToken, async (req, res) => {
     return res.status(401).send("You are not authorized to delete this item");
   }
 
-  chart.items.splice(
-    chart.items.findIndex(item => item.itemID == itemID),
-    1
-  );
+  const items = getItemsArray(chart);
+  const idx = items.findIndex(item => item.itemID == itemID);
+  if (idx === -1) {
+    return res.status(404).send("Item not found");
+  }
+  items.splice(idx, 1);
+  setItemsArray(chart, items);
+  await chart.save();
 
-  chart.changed("items", true);
-  chart.save();
-
-  res.send(200);
+  res.sendStatus(200);
 });
 
 router.post("/moveItem", authenticateToken, async (req, res) => {
@@ -111,19 +128,26 @@ router.post("/moveItem", authenticateToken, async (req, res) => {
     },
   });
 
-  const targetItem = fromChart.items.splice(
-    fromChart.items.findIndex(item => item.itemID == itemID),
-    1
-  );
+  if (!fromChart || !toChart) {
+    return res.status(404).send("Chart not found");
+  }
 
-  toChart.items = [...toChart.items, targetItem[0]];
+  const fromItems = getItemsArray(fromChart);
+  const toItems = getItemsArray(toChart);
 
-  fromChart.changed("items", true);
-  toChart.changed("items", true);
-  fromChart.save();
-  toChart.save();
+  const idx = fromItems.findIndex(item => item.itemID == itemID);
+  if (idx === -1) {
+    return res.status(404).send("Item not found");
+  }
+  const [targetItem] = fromItems.splice(idx, 1);
+  toItems.push(targetItem);
 
-  res.send(200);
+  setItemsArray(fromChart, fromItems);
+  setItemsArray(toChart, toItems);
+  await fromChart.save();
+  await toChart.save();
+
+  res.sendStatus(200);
 });
 
 router.post("/changeDescription", authenticateToken, async (req, res) => {
@@ -133,13 +157,20 @@ router.post("/changeDescription", authenticateToken, async (req, res) => {
     where: { chartID, userID: req.user.userID },
   });
 
-  chart.items.find(item => item.itemID == itemID).description = newDescription;
-  chart.changed("items", true);
-  chart.save();
+  if (!chart) {
+    return res.status(404).send("Chart not found");
+  }
+
+  const items = getItemsArray(chart);
+  const item = items.find(it => it.itemID == itemID);
+  if (!item) {
+    return res.status(404).send("Item not found");
+  }
+  item.description = newDescription;
+  setItemsArray(chart, items);
+  await chart.save();
 
   return res.status(200).json({ message: "Successfully updated description of item" });
 });
-
-
 
 module.exports = router;

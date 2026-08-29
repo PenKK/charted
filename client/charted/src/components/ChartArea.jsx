@@ -50,6 +50,7 @@ export default function ChartArea({ workspaceID, charts, setCharts }) {
       {/* <div className="charts-taskbar" /> */}
 
       <div className="chart-container gap-3">
+        {console.log('charts:', charts)}
         {charts.map(chart => (
           <Chart title={chart.name} chartID={chart.chartID} key={chart.chartID}>
             {chart.items.map(item => (

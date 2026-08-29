@@ -38,7 +38,12 @@ export default function Workspace() {
 
   useEffect(() => {
     async function loadCharts() {
-      setCharts(await getWorkspaceCharts(URL.id));
+      const rawCharts = await getWorkspaceCharts(URL.id);
+      const parsedCharts = rawCharts.map(chart => ({
+      ...chart,
+      items: typeof chart.items === 'string' ? JSON.parse(chart.items) : chart.items
+      }));
+      setCharts(parsedCharts);
     }
     loadCharts();
   }, [successfulLoad]);
